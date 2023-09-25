@@ -1,3 +1,14 @@
-from django.shortcuts import render
+class ProductsCreateView:
+    pass
 
-# Create your views here.
+
+class ProductsDetailView:
+    pass
+
+
+class ProductsDeleteView:
+    pass
+
+
+class ProductsListView:
+    pass
