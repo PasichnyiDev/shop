@@ -1,6 +1,6 @@
 from django.urls import path
 
-import views
+from transactions import views
 
 urlpatterns = [
     path('sales/create/', views.SalesCreateView, name='sales-create'),

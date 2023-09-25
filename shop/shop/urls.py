@@ -20,7 +20,7 @@ from django.urls import path, include, reverse
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    path('', RedirectView.as_view(url=reverse('products-list'), permanent=True), name='home'),
+    # path('', RedirectView.as_view(url=reverse('products-list'), permanent=True), name='home'),
     path('admin/', admin.site.urls),
     path('products/', include('products.urls')),
     path('transactions/', include('transactions.urls')),

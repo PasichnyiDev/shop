@@ -21,7 +21,3 @@ class Product(models.Model):
 
     def __str__(self):
         return f"PRODUCT: [{self.name}]"
-
-    # def is_available(self):
-    #     return self.in_stock_amount > 0
-
