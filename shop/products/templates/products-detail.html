@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/detail-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+
+    <div class="product-img">
+      <img src="{% static 'vendor/img/default-upload-image.jpg' %}">
+    </div>
+
+    <div class="product-info">
+
+      <div class="product-text">
+
+        <h1>{{ product.name }}</h1>
+        <h2>{{ product.brand }}</h2>
+        <p>Розмір: {{ product.size }}.</p>
+        <p>Колір: {{ product.color }}.</p>
+        <br>
+        <p>Наявні розміри:
+            {% if same_products %}
+                {% for product in same_products %}
+                    <a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.size }},</a>
+                {% endfor %}
+            {% else %}
+                {{ product.size }}.
+            {% endif %}
+        </p>
+        <p>Наявні кольори:
+            {% if same_products %}
+                {% for product in same_products %}
+                    <a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.color }},</a>
+                {% endfor %}
+            {% else %}
+                {{ product.color }}.
+            {% endif %}
+        </p>
+        <br>
+        <p>Ціна закупівлі: <b>{{ product.purchase_price }}</b></p>
+        <p>Ціна продажу: <b>{{ product.selling_price }}</b></p>
+
+      </div>
+
+    </div>
+
+</div>
+
+<div class="button-container">
+    <a href="#" class="btn btn-outline-success">Продати</a>
+    <a href="#" class="btn btn-outline-success">Закупити</a>
+    <a href="{% url 'products:products-delete' pk=product.pk %}" class="btn btn-outline-danger">Видалити</a>
+</div>
+{% endblock %}

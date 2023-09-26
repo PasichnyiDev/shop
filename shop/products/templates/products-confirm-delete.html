@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/delete-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <form method="post" class="form-style-7">
+    {% csrf_token %}
+    <h1>Видалити товар</h1>
+    <ul>
+      <li>Ви впевнені, що бажаєте видалити "{{ object.name }}"?</li>
+    </ul>
+    <div class="text-center">
+    <input class="btn btn-outline-danger" type="submit" value="Confirm">
+    </div>
+  </form>
+</div>
+
+{% endblock %}

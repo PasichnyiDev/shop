@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/create-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="form-wrapper">
+        <h2>Створення товару</h2>
+        <form method="post" class="form-style-7">
+            {% csrf_token %}
+        <ul>
+            <div class="form-column">
+                <li>
+                    <label for="{{ form.article.id_for_label }}" type="text">{{ form.article.label_tag }}</label>
+                    {{ form.article }}
+                    <span>Введіть артикул товару</span>
+                </li>
+                <li>
+                    <label for="{{ form.name.id_for_label }}" type="text">{{ form.name.label_tag }}</label>
+                    {{ form.name }}
+                    <span>Введіть назву товару</span>
+                </li>
+                <li>
+                    <label for="{{ form.brand.id_for_label }}" type="text">{{ form.brand.label_tag }}</label>
+                    {{ form.brand }}
+                    <span>Введіть бренд товару</span>
+                </li>
+                <li>
+                    <label for="{{ form.color.id_for_label }}" type="text">{{ form.color.label_tag }}</label>
+                    {{ form.color }}
+                    <span>Введіть колір товару</span>
+                </li>
+
+            </div>
+            <div class="form-column">
+                <li>
+                    <label for="{{ form.size.id_for_label }}" type="text">{{ form.size.label_tag }}</label>
+                    {{ form.size }}
+                    <span>Введіть розмір товару</span>
+                </li>
+                <li>
+                    <label for="{{ form.purchase_price.id_for_label }}">{{ form.purchase_price.label_tag }}</label>
+                    {{ form.purchase_price }}
+                    <span>Введіть закупівельну вартість товару</span>
+                </li>
+                <li>
+                    <label for="{{ form.selling_price.id_for_label }}">{{ form.selling_price.label_tag }}</label>
+                    {{ form.selling_price }}
+                    <span>Введіть вартість продажу товару</span>
+                </li>
+
+                <li type="number">
+                    <label for="{{ form.in_stock_amount.id_for_label }}">{{ form.in_stock_amount.label_tag }}</label>
+                    {{ form.in_stock_amount }}
+                    <span>Введіть наявну кількість товару</span>
+                </li>
+            </div>
+            <li class="last-li">
+                <label for="{{ form.category.id_for_label }}">{{ form.category.label_tag }}</label>
+                {{ form.category }}
+                <span>Виберіть категорію товару</span>
+            </li>
+        </ul>
+        <div class="text-center">
+            <input class="btn btn-outline-success" type="submit" value="Створити">
+        </div>
+        </form>
+    </div>
+    </div>
+{% endblock %}
