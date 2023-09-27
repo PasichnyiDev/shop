@@ -50,7 +50,7 @@
 </div>
 
 <div class="button-container">
-    <a href="#" class="btn btn-outline-success">Продати</a>
+    <a href="{% url 'transactions:sales-create' product_id=product.pk %}" class="btn btn-outline-success">Продати</a>
     <a href="#" class="btn btn-outline-success">Закупити</a>
     <a href="{% url 'products:products-delete' pk=product.pk %}" class="btn btn-outline-danger">Видалити</a>
 </div>

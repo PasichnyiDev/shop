@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/sales-list-styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="table-wrapper">
+        <h2>Таблиця продаж</h2>
+        <table class="fl-table">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Ціна товару</th>
+                    <th>Ціна продажу</th>
+                    <th>Знижка</th>
+                    <th>Кількість</th>
+                    <th>Дата продажу</th>
+                </tr>
+            </thead>
+
+            {% for sale in sales %}
+                <tr>
+                    <td>{{ sale.product.name }}</td>
+                    <td>{{ sale.product.selling_price }}</td>
+                    <td>{{ sale.selling_price }}</td>
+                    <td>{{ sale.discount }}</td>
+                    <td>{{ sale.amount }}</td>
+                    <td>{{ sale.datetime_created|date:"d.m.Y H:i:s" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

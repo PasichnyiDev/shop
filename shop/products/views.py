@@ -4,6 +4,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView, DeleteView
 from .models import Product, ProductCategory
 from .forms import ProductsCreateForm
+from transactions.models import Sale
 
 
 class ProductsCreateView(CreateView):
@@ -52,6 +53,7 @@ class ProductsListView(ListView):
             context['products'] = context['products'].filter(category__id=category_id)
 
         context['search_bar'] = True
+        context['sales'] = Sale.objects.all()
 
         search_query = self.request.GET.get('search')
         if search_query:

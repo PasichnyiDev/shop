@@ -41,6 +41,11 @@
                     </form>
                 </li>
                 {% endif %}
+                {% if sales %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'transactions:sales-list' %}">Мої продажі</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item dropdown">
                     {% if categories %}
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
