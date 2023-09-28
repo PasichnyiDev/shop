@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/create-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="form-wrapper">
+        <h2>Створення категорії товару</h2>
+        <form method="post" class="form-style-7">
+            {% csrf_token %}
+        <ul>
+            <li>
+                <label for="{{ form.name.id_for_label }}" type="text">{{ form.name.label_tag }}</label>
+                {{ form.name }}
+                <span>Введіть назву категорії</span>
+            </li>
+        </ul>
+        <div class="text-center">
+            <input class="btn btn-outline-success" type="submit" value="Створити">
+        </div>
+        </form>
+    </div>
+    </div>
+{% endblock %}

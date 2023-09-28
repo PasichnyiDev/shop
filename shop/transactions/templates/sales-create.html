@@ -10,11 +10,17 @@
   <form method="post" class="form-style-7">
         {% csrf_token %}
         <h1>Створити продажу товару {{ product.name }}</h1>
+        <h6>Розмір: {{ product.size }}, Колір: {{ product.color }}</h6>
     <div class="form-column">
       <li>
           <label for="{{ form.selling_price.id_for_label }}" type="text">{{ form.selling_price.label_tag }}</label>
           {{ form.selling_price }}
           <span>Ціна відповідно до обліку {{ product.selling_price }}</span>
+      </li>
+      <li>
+          <label class="form-check-input" for="{{ form.non_cash.id_for_label }}" type="text">{{ form.non_cash.label_tag }}</label>
+          {{ form.non_cash }}
+          <span>За замовчуванням готівка</span>
       </li>
     </div>
     <div class="form-column">

@@ -41,13 +41,8 @@
                     </form>
                 </li>
                 {% endif %}
-                {% if sales %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'transactions:sales-list' %}">Мої продажі</a>
-                    </li>
-                {% endif %}
+                {% if categories %}
                 <li class="nav-item dropdown">
-                    {% if categories %}
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         Категорії
@@ -57,11 +52,21 @@
                         <a class="dropdown-item" href="?category={{ category.id }}">{{ category.name }}</a>
                         {% endfor %}
                     </div>
-                    {% endif %}
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'products:products-create' %}">Додати товар  <i class="fas fa-shopping-bag"></i></a>
+                {% endif %}
+                {% if add_product and add_category %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Додати
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'products:products-create' %}">Додати товар</a>
+                        <a class="dropdown-item" href="{% url 'products:category-create' %}">Додати категорію</a>
+                    </div>
+
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>

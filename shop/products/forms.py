@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product
+from .models import Product, ProductCategory
 
 
 class ProductsCreateForm(forms.ModelForm):
@@ -23,4 +23,13 @@ class ProductsCreateForm(forms.ModelForm):
             'category': forms.Select(),
             'purchase_price': forms.TextInput(attrs={'type': 'number', 'step': '0.01'}),
             'selling_price': forms.TextInput(attrs={'type': 'number', 'step': '0.01'}),
+        }
+
+
+class ProductsCategoryCreateForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = ['name',]
+        labels = {
+            'name': 'Назва категорії',
         }

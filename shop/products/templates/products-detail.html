@@ -3,6 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/detail-styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sales-list-styles.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -18,27 +19,26 @@
 
         <h1>{{ product.name }}</h1>
         <h2>{{ product.brand }}</h2>
-        <p>Розмір: {{ product.size }}.</p>
-        <p>Колір: {{ product.color }}.</p>
+        <p>Розмір: {{ product.size }}</p>
+        <p>Колір: {{ product.color }}</p>
+        <p>Кількість: {{ product.in_stock_amount }}</p>
         <br>
-        <p>Наявні розміри:
-            {% if same_products %}
-                {% for product in same_products %}
-                    <a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.size }},</a>
-                {% endfor %}
-            {% else %}
-                {{ product.size }}.
-            {% endif %}
-        </p>
-        <p>Наявні кольори:
-            {% if same_products %}
-                {% for product in same_products %}
-                    <a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.color }},</a>
-                {% endfor %}
-            {% else %}
-                {{ product.color }}.
-            {% endif %}
-        </p>
+<!--        <p>Наявні розміри:-->
+<!--            {% if available_sizes %}-->
+<!--                {% for product in available_sizes %}-->
+<!--                    <a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.size }},</a>-->
+<!--                {% endfor %}-->
+<!--            {% else %}-->
+<!--                {{ product.size }}.-->
+<!--            {% endif %}-->
+<!--        </p>-->
+<!--        <p>Наявні кольори:-->
+<!--            {% if available_colors %}-->
+<!--                {% for product in available_colors %}-->
+<!--                    <a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.color }} </a>-->
+<!--                {% endfor %}-->
+<!--            {% endif %}-->
+<!--        </p>-->
         <br>
         <p>Ціна закупівлі: <b>{{ product.purchase_price }}</b></p>
         <p>Ціна продажу: <b>{{ product.selling_price }}</b></p>
@@ -54,4 +54,60 @@
     <a href="#" class="btn btn-outline-success">Закупити</a>
     <a href="{% url 'products:products-delete' pk=product.pk %}" class="btn btn-outline-danger">Видалити</a>
 </div>
+
+{% if sales %}
+<div class="table-wrapper">
+    <h2 class="table-header">Продажі цього товару</h2>
+    <table class="fl-table">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Ціна товару</th>
+                <th>Ціна продажу</th>
+                <th>Знижка</th>
+                <th>Кількість</th>
+                <th>Підсумкова вартість</th>
+                <th>Дата продажу</th>
+            </tr>
+        </thead>
+
+        {% for sale in sales %}
+            <tr>
+                <td><a href="{% url 'transactions:sales-detail' sale_id=sale.pk %}">{{ sale.product.name }}</a></td>
+                <td>{{ sale.product.selling_price }}</td>
+                {% if sale.non_cash %}
+                    <td><b>{{ sale.selling_price }} </b>Б</td>
+                {% else %}
+                    <td>{{ sale.selling_price }}</td>
+                {% endif %}
+                <td>{{ sale.discount }}</td>
+                <td>{{ sale.amount }}</td>
+                <td>{{ sale.total_price }}</td>
+                <td>{{ sale.datetime_created|date:"d.m.Y H:i:s" }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+{% if amount_sum and total_price_sum_cash and total_price_sum_non_cash and total_price_sum%}
+<div class="table-wrapper">
+    <h2 class="table-header">Узагальнена інформація про продажі</h2>
+    <table class="fl-table">
+        <thead>
+            <tr>
+                <th>Кількість</th>
+                <th>Сума готівкою</th>
+                <th>Сума безготівково</th>
+                <th>Загальна сума</th>
+            </tr>
+        </thead>
+            <tr>
+                <td>{{ amount_sum }}</td>
+                <td>{{ total_price_sum_cash }}</td>
+                <td>{{ total_price_sum_non_cash }}</td>
+                <td>{{ total_price_sum }}</td>
+            </tr>
+    </table>
+</div>
+{% endif %}
 {% endblock %}

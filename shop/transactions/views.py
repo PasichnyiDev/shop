@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView, DeleteView
+from django.db.models import Sum
 
 from .models import Sale
 from .forms import SaleForm
@@ -24,7 +25,9 @@ class SalesCreateView(CreateView):
     def form_valid(self, form):
         form.instance.product = self.get_product_from_route()
         form.instance.discount = round((form.instance.product.selling_price - form.instance.selling_price), 2)
+        form.instance.total_price = round((form.instance.selling_price * form.instance.amount), 2)
         response = super().form_valid(form)
+        form.instance.non_cash = form.cleaned_data['non_cash']
         form.instance.product.in_stock_amount -= form.instance.amount
         form.instance.product.save()
         return response
@@ -33,12 +36,27 @@ class SalesCreateView(CreateView):
         return Product.objects.get(pk=self.kwargs['product_id'])
 
 
-class SalesDetailView:
-    pass
+class SalesDetailView(DetailView):
+    model = Sale
+    template_name = 'sales-detail.html'
+    context_object_name = 'sale'
+    pk_url_kwarg = 'sale_id'
 
 
-class SalesDeleteView:
-    pass
+class SalesDeleteView(DeleteView):
+    model = Sale
+    success_url = reverse_lazy('products:products-list')
+    template_name = 'sales-confirm-delete.html'
+    pk_url_kwarg = 'sale_id'
+
+    def form_valid(self, form):
+        sale = self.get_object()
+        product = sale.product
+
+        product.in_stock_amount += sale.amount
+        product.save()
+
+        return super().form_valid(form)
 
 
 class SalesListView(ListView):

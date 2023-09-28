@@ -1,9 +1,9 @@
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView, DeleteView
 from .models import Product, ProductCategory
-from .forms import ProductsCreateForm
+from .forms import ProductsCreateForm, ProductsCategoryCreateForm
 from transactions.models import Sale
 
 
@@ -22,13 +22,32 @@ class ProductsDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
+
             context["object"] = self.object
             context_object_name = self.get_context_object_name(self.object)
+
             if context_object_name:
                 context[context_object_name] = self.object
-            context['same_products'] = Product.objects.filter(
-                name=self.object.name, brand=self.object.brand
-            ).exclude(id=self.object.id)
+
+            # Sales
+            sales = Sale.objects.filter(product__id=self.object.id)
+            context["sales"] = sales
+
+            total_price_sum_non_cash = sales.filter(non_cash=True).aggregate(
+                total_price_sum=Sum('total_price'))['total_price_sum']
+            if total_price_sum_non_cash:
+                context['total_price_sum_non_cash'] = total_price_sum_non_cash
+
+            total_price_sum_cash = sales.filter(non_cash=False).aggregate(
+                total_price_sum=Sum('total_price'))['total_price_sum']
+            if total_price_sum_cash:
+                context['total_price_sum_cash'] = total_price_sum_cash
+            if total_price_sum_cash and total_price_sum_non_cash:
+                total_price_sum = total_price_sum_non_cash + total_price_sum_cash
+                context['total_price_sum'] = total_price_sum
+            amount_sum = sales.aggregate(amount_sum=Sum('amount'))['amount_sum']
+            if amount_sum:
+                context['amount_sum'] = amount_sum
 
         return context
 
@@ -54,6 +73,8 @@ class ProductsListView(ListView):
 
         context['search_bar'] = True
         context['sales'] = Sale.objects.all()
+        context['add_product'] = True
+        context['add_category'] = True
 
         search_query = self.request.GET.get('search')
         if search_query:
@@ -71,3 +92,9 @@ class ProductsListView(ListView):
 
         return context
 
+
+class ProductsCategoryCreateView(CreateView):
+    model = ProductCategory
+    form_class = ProductsCategoryCreateForm
+    template_name = 'products-category-create.html'
+    success_url = reverse_lazy('products:products-list')
