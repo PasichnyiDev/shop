@@ -9,9 +9,9 @@
 <div class="form-wrapper">
     <form method="post" class="form-style-7">
     {% csrf_token %}
-    <h1>Видалити товар</h1>
+    <h1>Видалити закупівлю</h1>
     <ul>
-      <li>Ви впевнені, що бажаєте видалити "{{ object.name }}"?</li>
+      <li>Ви впевнені, що бажаєте видалити закупівлю товару "{{ object.product.name }}"?</li>
     </ul>
     <div class="text-center">
     <input class="btn btn-outline-danger" type="submit" value="Підтвердити">

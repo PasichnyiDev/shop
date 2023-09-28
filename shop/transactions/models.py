@@ -20,7 +20,6 @@ class Purchase(models.Model):
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
     amount = models.IntegerField(default=1)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    discount = models.DecimalField(max_digits=10, decimal_places=2)
     non_cash = models.BooleanField(default=False)
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
 

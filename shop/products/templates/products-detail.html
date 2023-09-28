@@ -51,7 +51,7 @@
 
 <div class="button-container">
     <a href="{% url 'transactions:sales-create' product_id=product.pk %}" class="btn btn-outline-success">Продати</a>
-    <a href="#" class="btn btn-outline-success">Закупити</a>
+    <a href="{% url 'transactions:purchases-create' product_id=product.pk %}" class="btn btn-outline-success">Закупити</a>
     <a href="{% url 'products:products-delete' pk=product.pk %}" class="btn btn-outline-danger">Видалити</a>
 </div>
 
@@ -61,19 +61,19 @@
     <table class="fl-table">
         <thead>
             <tr>
-                <th>Товар</th>
+                <th>Дата продажу</th>
                 <th>Ціна товару</th>
                 <th>Ціна продажу</th>
                 <th>Знижка</th>
                 <th>Кількість</th>
                 <th>Підсумкова вартість</th>
-                <th>Дата продажу</th>
+                <th>                 </th>
             </tr>
         </thead>
 
         {% for sale in sales %}
             <tr>
-                <td><a href="{% url 'transactions:sales-detail' sale_id=sale.pk %}">{{ sale.product.name }}</a></td>
+                <td><a href="{% url 'transactions:sales-detail' sale_id=sale.pk %}">{{ sale.datetime_created|date:"d.m.Y H:i:s" }}</a></td>
                 <td>{{ sale.product.selling_price }}</td>
                 {% if sale.non_cash %}
                     <td><b>{{ sale.selling_price }} </b>Б</td>
@@ -83,7 +83,7 @@
                 <td>{{ sale.discount }}</td>
                 <td>{{ sale.amount }}</td>
                 <td>{{ sale.total_price }}</td>
-                <td>{{ sale.datetime_created|date:"d.m.Y H:i:s" }}</td>
+                <td><img src="{% static 'vendor/img/arrow_up.png' %}" width="32" height="32"></td>
             </tr>
         {% endfor %}
     </table>
@@ -110,4 +110,18 @@
     </table>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block footer %}
+<footer class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav" style="margin: 0 auto">
+                <li class="navbar-brand" style="color: #ED0000">
+                    <p style="padding: 0; margin: 0 auto">Безготівковий ліміт: {{ month_non_cash_limit }}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
 {% endblock %}

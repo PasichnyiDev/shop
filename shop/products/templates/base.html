@@ -32,6 +32,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
+                {% block nav_bar %}
+                {% endblock %}
                 {% if search_bar %}
                 <li>
                     <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'products:products-list' %}">
@@ -64,7 +66,23 @@
                         <a class="dropdown-item" href="{% url 'products:products-create' %}">Додати товар</a>
                         <a class="dropdown-item" href="{% url 'products:category-create' %}">Додати категорію</a>
                     </div>
-
+                </li>
+                {% endif %}
+                {% if is_transactions %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Транзакції
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'transactions:transactions-list' %}">Усі</a>
+                        {% if sales %}
+                        <a class="dropdown-item" href="{% url 'transactions:sales-list' %}">Продажі</a>
+                        {% endif %}
+                        {% if purchases %}
+                        <a class="dropdown-item" href="{% url 'transactions:purchases-list' %}">Закупівлі</a>
+                        {% endif %}
+                    </div>
                 </li>
                 {% endif %}
             </ul>
@@ -74,7 +92,9 @@
 
 {% block content %} {% endblock %}
 
-{% block footer %} {% endblock %}
+    {% block footer %}
+    {% endblock %}
+
 
 <!-- Bootstrap core JavaScript -->
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>

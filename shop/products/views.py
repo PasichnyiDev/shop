@@ -4,17 +4,19 @@ from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView, DeleteView
 from .models import Product, ProductCategory
 from .forms import ProductsCreateForm, ProductsCategoryCreateForm
-from transactions.models import Sale
+
+from shop.mixins import NonCashLimitContextMixin
+from transactions.models import Sale, Purchase
 
 
-class ProductsCreateView(CreateView):
+class ProductsCreateView(NonCashLimitContextMixin, CreateView):
     model = Product
     form_class = ProductsCreateForm
     template_name = 'products-create.html'
     success_url = reverse_lazy('products:products-list')
 
 
-class ProductsDetailView(DetailView):
+class ProductsDetailView(NonCashLimitContextMixin, DetailView):
     model = Product
     template_name = 'products-detail.html'
     context_object_name = 'product'
@@ -52,13 +54,13 @@ class ProductsDetailView(DetailView):
         return context
 
 
-class ProductsDeleteView(DeleteView):
+class ProductsDeleteView(NonCashLimitContextMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('products:products-list')
     template_name = 'products-confirm-delete.html'
 
 
-class ProductsListView(ListView):
+class ProductsListView(NonCashLimitContextMixin, ListView):
     model = Product
     template_name = 'products-list.html'
     context_object_name = 'products'
@@ -72,9 +74,11 @@ class ProductsListView(ListView):
             context['products'] = context['products'].filter(category__id=category_id)
 
         context['search_bar'] = True
-        context['sales'] = Sale.objects.all()
         context['add_product'] = True
         context['add_category'] = True
+        context['is_transactions'] = self.check_transactions()
+        context['sales'] = self.check_sales()
+        context['purchases'] = self.check_purchases()
 
         search_query = self.request.GET.get('search')
         if search_query:
@@ -92,8 +96,24 @@ class ProductsListView(ListView):
 
         return context
 
+    @staticmethod
+    def check_transactions():
+        return Sale.objects.last() or Purchase.objects.last()
 
-class ProductsCategoryCreateView(CreateView):
+    @staticmethod
+    def check_sales():
+        if Sale.objects.last():
+            return True
+        return False
+
+    @staticmethod
+    def check_purchases():
+        if Purchase.objects.last():
+            return True
+        return False
+
+
+class ProductsCategoryCreateView(NonCashLimitContextMixin, CreateView):
     model = ProductCategory
     form_class = ProductsCategoryCreateForm
     template_name = 'products-category-create.html'

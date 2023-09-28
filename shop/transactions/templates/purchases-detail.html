@@ -16,13 +16,13 @@
 
       <div class="product-text">
 
-        <h1>{{ sale.product.name }}</h1>
-        <p>{{ sale.product.brand }}</p>
-        <h2>{{ sale.datetime_created|date:"d.m.Y H:i:s" }}</h2>
-        <p>Розмір: {{ sale.product.size }}</p>
-        <p>Колір: {{ sale.product.color }}</p>
-        <p>Кількість: {{ sale.amount }}</p>
-        <p>Ціна за одиницю: <b>{{ sale.selling_price }}</b></p>
+        <h1>{{ purchase.product.name }}</h1>
+        <p>{{ purchase.product.brand }}</p>
+        <h2>{{ purchase.datetime_created|date:"d.m.Y H:i:s" }}</h2>
+        <p>Розмір: {{ purchase.product.size }}</p>
+        <p>Колір: {{ purchase.product.color }}</p>
+        <p>Кількість: {{ purchase.amount }}</p>
+        <p>Ціна за одиницю: <b>{{ purchase.purchase_price }}</b></p>
         <p>Загальна ціна: <b>{{ sale.total_price }}</b></p>
 
       </div>

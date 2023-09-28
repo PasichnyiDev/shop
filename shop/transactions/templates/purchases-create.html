@@ -9,13 +9,13 @@
 <div class="form-wrapper">
   <form method="post" class="form-style-7">
         {% csrf_token %}
-        <h1>Створити продажу товару {{ product.name }}</h1>
+        <h1>Створити закупівлю товару {{ product.name }}</h1>
         <h6>Розмір: {{ product.size }}, Колір: {{ product.color }}</h6>
     <div class="form-column">
       <li>
-          <label for="{{ form.selling_price.id_for_label }}" type="text">{{ form.selling_price.label_tag }}</label>
-          {{ form.selling_price }}
-          <span>Ціна відповідно до обліку {{ product.selling_price }}</span>
+          <label for="{{ form.purchase_price.id_for_label }}" type="text">{{ form.purchase_price.label_tag }}</label>
+          {{ form.purchase_price }}
+          <span>Ціна відповідно до обліку {{ product.purchase_price }}</span>
       </li>
       <li>
           <label class="form-check-input" for="{{ form.non_cash.id_for_label }}" type="text">{{ form.non_cash.label_tag }}</label>
@@ -31,7 +31,7 @@
       </li>
     </div>
     <div class="text-center">
-        <input class="btn btn-outline-success" type="submit" value="Продати">
+        <input class="btn btn-outline-success" type="submit" value="Закупити">
     </div>
   </form>
 </div>
