@@ -9,8 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <title>{{ title }}</title>
+    {% block title %}{% endblock %}
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -34,15 +33,6 @@
             <ul class="navbar-nav ml-auto">
                 {% block nav_bar %}
                 {% endblock %}
-                {% if search_bar %}
-                <li>
-                    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'products:products-list' %}">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Пошук" aria-label="Пошук" name="search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
-                        <a class="btn btn-outline-danger ml-2" href="{% url 'products:products-list' %}">Скинути</a>
-                    </form>
-                </li>
-                {% endif %}
                 {% if categories %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -53,18 +43,6 @@
                         {% for category in categories %}
                         <a class="dropdown-item" href="?category={{ category.id }}">{{ category.name }}</a>
                         {% endfor %}
-                    </div>
-                </li>
-                {% endif %}
-                {% if add_product and add_category %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Додати
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'products:products-create' %}">Додати товар</a>
-                        <a class="dropdown-item" href="{% url 'products:category-create' %}">Додати категорію</a>
                     </div>
                 </li>
                 {% endif %}
@@ -85,6 +63,27 @@
                     </div>
                 </li>
                 {% endif %}
+                {% if add_product and add_category %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Додати
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'products:products-create' %}">Додати товар</a>
+                        <a class="dropdown-item" href="{% url 'products:category-create' %}">Додати категорію</a>
+                    </div>
+                </li>
+                {% endif %}
+                {% if search_bar %}
+                <li>
+                    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'products:products-list' %}">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Пошук" aria-label="Пошук" name="search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
+                        <a class="btn btn-outline-danger ml-2" href="{% url 'products:products-list' %}">Скинути</a>
+                    </form>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>
@@ -92,19 +91,21 @@
 
 {% block content %} {% endblock %}
 
-    {% block footer %}
-    {% endblock %}
-
+<footer class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav" style="margin: 0 auto">
+                <li class="navbar-brand" style="color: #dc3545">
+                    <p style="padding: 0; margin: 0 auto">Безготівковий ліміт: {{ month_non_cash_limit }}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
 
 <!-- Bootstrap core JavaScript -->
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
-
-<!-- FontAwesome script -->
-<script src="{% static 'vendor/fontawesome/fontawesome-icons.js' %}" crossorigin="anonymous"></script>
 
 </body>
 

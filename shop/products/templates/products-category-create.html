@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}<title>{{ title }}</title>{% endblock %}
+
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/create-styles.css' %}">
 {% endblock %}
@@ -8,34 +10,20 @@
 {% block content %}
     <div>
         <div class="form-wrapper">
-        <h2>Створення категорії товару</h2>
-        <form method="post" class="form-style-7">
-            {% csrf_token %}
-        <ul>
-            <li>
-                <label for="{{ form.name.id_for_label }}" type="text">{{ form.name.label_tag }}</label>
-                {{ form.name }}
-                <span>Введіть назву категорії</span>
-            </li>
-        </ul>
-        <div class="text-center">
-            <input class="btn btn-outline-success" type="submit" value="Створити">
-        </div>
-        </form>
-    </div>
-    </div>
-{% endblock %}
-
-{% block footer %}
-<footer class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
-    <div class="container">
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav" style="margin: 0 auto">
-                <li class="navbar-brand" style="color: #ED0000">
-                    <p style="padding: 0; margin: 0 auto">Безготівковий ліміт: {{ month_non_cash_limit }}</p>
-                </li>
-            </ul>
+            <h2>Створення категорії товару</h2>
+            <form method="post" class="form-style-7">
+                {% csrf_token %}
+                <ul>
+                    <li>
+                        <label for="{{ form.name.id_for_label }}" type="text">{{ form.name.label_tag }}</label>
+                            {{ form.name }}
+                        <span>Введіть назву категорії</span>
+                    </li>
+                </ul>
+                <div class="text-center">
+                    <input class="btn btn-outline-success" type="submit" value="Створити">
+                </div>
+            </form>
         </div>
     </div>
-</footer>
 {% endblock %}

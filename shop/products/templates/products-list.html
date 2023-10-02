@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}<title>{{ title }}</title>{% endblock %}
+
 {% block css %}
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
+{% if products %}
     <div class="table-wrapper">
         <h2>Таблиця товарів</h2>
         <table class="fl-table">
@@ -23,33 +26,49 @@
                 </tr>
             </thead>
 
-            {% for product in products %}
+        {% for product in products %}
+            {% if product.in_stock_amount < 1 %}
+                <tr style="background-color: #ffffcc">
+                    <td>{{ product.article }}</td>
+                    <td><a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.name }}</a></td>
+                    <td>{{ product.brand }}</td>
+    <!--                    <td>{{ product.color }}</td>-->
+    <!--                    <td>{{ product.size }}</td>-->
+    <!--                    <td>{{ product.purchase_price }}</td>-->
+                    <td>{{ product.selling_price }}</td>
+                    <td>{{ product.in_stock_amount }}</td>
+    <!--                <td>{{ product.category.name }}</td>-->
+                </tr>
+            {% else %}
                 <tr>
                     <td>{{ product.article }}</td>
                     <td><a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.name }}</a></td>
                     <td>{{ product.brand }}</td>
-<!--                    <td>{{ product.color }}</td>-->
-<!--                    <td>{{ product.size }}</td>-->
-<!--                    <td>{{ product.purchase_price }}</td>-->
+    <!--                    <td>{{ product.color }}</td>-->
+    <!--                    <td>{{ product.size }}</td>-->
+    <!--                    <td>{{ product.purchase_price }}</td>-->
                     <td>{{ product.selling_price }}</td>
                     <td>{{ product.in_stock_amount }}</td>
-<!--                <td>{{ product.category.name }}</td>-->
+    <!--                <td>{{ product.category.name }}</td>-->
                 </tr>
-            {% endfor %}
+            {% endif %}
+        {% endfor %}
         </table>
     </div>
-{% endblock %}
-
-{% block footer %}
-<footer class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
-    <div class="container">
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav" style="margin: 0 auto">
-                <li class="navbar-brand" style="color: #ED0000">
-                    <p style="padding: 0; margin: 0 auto">Безготівковий ліміт: {{ month_non_cash_limit }}</p>
-                </li>
-            </ul>
-        </div>
+{% else %}
+<div class="image-container">
+    <div>
+        <a href="{% url 'products:products-create' %}" class="image-link">
+            <img src="{% static 'vendor/img/cross.png' %}" alt="Image 1">
+        </a>
+        <h5>Додати товар</h5>
     </div>
-</footer>
+    <div>
+        <a href="{% url 'products:category-create' %}" class="image-link">
+            <img src="{% static 'vendor/img/cross.png' %}" alt="Image 2">
+        </a>
+       <h5>Додати категорію</h5>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

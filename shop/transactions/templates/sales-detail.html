@@ -1,51 +1,34 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}<title>{{ title }}</title>{% endblock %}
+
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/detail-styles.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="wrapper">
-
-    <div class="product-img">
-        <img src="{% static 'vendor/img/default-upload-image.jpg' %}">
-    </div>
-
-    <div class="product-info">
-
-      <div class="product-text">
-
-        <h1>{{ sale.product.name }}</h1>
-        <p>{{ sale.product.brand }}</p>
-        <h2>{{ sale.datetime_created|date:"d.m.Y H:i:s" }}</h2>
-        <p>Розмір: {{ sale.product.size }}</p>
-        <p>Колір: {{ sale.product.color }}</p>
-        <p>Кількість: {{ sale.amount }}</p>
-        <p>Ціна за одиницю: <b>{{ sale.selling_price }}</b></p>
-        <p>Загальна ціна: <b>{{ sale.total_price }}</b></p>
-
-      </div>
-
-    </div>
-
-</div>
-
-<div class="button-container">
-    <a href="{% url 'transactions:sales-delete' sale_id=sale.pk %}" class="btn btn-outline-danger">Видалити</a>
-</div>
-{% endblock %}
-
-{% block footer %}
-<footer class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
-    <div class="container">
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav" style="margin: 0 auto">
-                <li class="navbar-brand" style="color: #ED0000">
-                    <p style="padding: 0; margin: 0 auto">Безготівковий ліміт: {{ month_non_cash_limit }}</p>
-                </li>
-            </ul>
+    <div class="wrapper">
+        <div class="product-img">
+            <img src="{% static 'vendor/img/default-upload-image.jpg' %}">
         </div>
+
+        <div class="product-info">
+            <div class="product-text">
+                <h1>{{ sale.product.name }}</h1>
+                <p>{{ sale.product.brand }}</p>
+                <h2>{{ sale.datetime_created|date:"d.m.Y H:i:s" }}</h2>
+                <p>Розмір: {{ sale.product.size }}</p>
+                <p>Колір: {{ sale.product.color }}</p>
+                <p>Кількість: {{ sale.amount }}</p>
+                <p>Ціна за одиницю: <b>{{ sale.selling_price }}</b></p>
+                <p>Загальна ціна: <b>{{ sale.total_price }}</b></p>
+            </div>
+        </div>
+
     </div>
-</footer>
+
+    <div class="button-container">
+        <a href="{% url 'transactions:sales-delete' sale_id=sale.pk %}" class="btn btn-outline-danger">Видалити</a>
+    </div>
 {% endblock %}

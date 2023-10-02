@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}<title>{{ title }}</title>{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/detail-styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sales-list-styles.css' %}">
+{% endblock %}
+
+{% block nav_bar %}
+    {% if product_id %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'products:products-detail' pk=product_id %}">Повернутись до товару</a>
+        </li>
+    {% endif %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            Фільтр
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="?period=day">День</a>
+            <a class="dropdown-item" href="?period=week">Тиждень</a>
+            <a class="dropdown-item" href="?period=month">Місяць</a>
+            <a class="dropdown-item" href="?period=quarter">Квартал</a>
+            <a class="dropdown-item" href="?period=year">Рік</a>
+            <a class="dropdown-item" href="?period=current_week">Поточний тиждень</a>
+            <a class="dropdown-item" href="?period=current_month">Поточний місяць</a>
+            <a class="dropdown-item" href="?period=current_year">Поточний рік</a>
+        </div>
+    </li>
+    {% if product_id %}
+        <li><a class="btn btn-outline-danger ml-2" href="{% url 'transactions:transactions-total' product_id=product_id %}">Скинути</a></li>
+    {% else %}
+        <li><a class="btn btn-outline-danger ml-2" href="{% url 'transactions:transactions-total' %}">Скинути</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="table-wrapper">
+    {% if product %}
+        <h2 class="table-header">Узагальнені відомості про продажі товару {{ product.name }}.</h2>
+    {% else %}
+        <h2 class="table-header">Узагальнені відомості про продажі.</h2>
+    {% endif %}
+    <table class="fl-table">
+        <thead>
+            <tr>
+                <th>Кількість</th>
+                <th>Сума готівкою</th>
+                <th>Сума безготівково</th>
+                <th>Загальна сума</th>
+            </tr>
+        </thead>
+            <tr style="background-color: #ccffcc">
+                <td>{{ sales_total_amount_sum }}</td>
+                <td>{{ sales_total_cash_price_sum }}</td>
+                <td>{{ sales_total_non_cash_price_sum }}</td>
+                <td>{{ sales_total_sum }}</td>
+            </tr>
+    </table>
+</div>
+
+<div class="table-wrapper">
+    {% if product %}
+        <h2 class="table-header">Узагальнені відомості про закупівлі товару {{ product.name }}.</h2>
+    {% else %}
+        <h2 class="table-header">Узагальнені відомості про закупівлі.</h2>
+    {% endif %}
+    <table class="fl-table">
+        <thead>
+            <tr>
+                <th>Кількість</th>
+                <th>Сума готівкою</th>
+                <th>Сума безготівково</th>
+                <th>Загальна сума</th>
+            </tr>
+        </thead>
+            <tr style="background-color: #ffd6cc">
+                <td>{{ purchases_total_amount_sum }}</td>
+                <td>{{ purchases_total_cash_price_sum }}</td>
+                <td>{{ purchases_total_non_cash_price_sum }}</td>
+                <td>{{ purchases_total_sum }}</td>
+            </tr>
+    </table>
+</div>
+{% endblock %}

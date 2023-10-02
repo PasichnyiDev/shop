@@ -1,52 +1,40 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}<title>{{ title }}</title>{% endblock %}
+
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/sales-create-styles.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="form-wrapper">
-  <form method="post" class="form-style-7">
-        {% csrf_token %}
-        <h1>Створити закупівлю товару {{ product.name }}</h1>
-        <h6>Розмір: {{ product.size }}, Колір: {{ product.color }}</h6>
-    <div class="form-column">
-      <li>
-          <label for="{{ form.purchase_price.id_for_label }}" type="text">{{ form.purchase_price.label_tag }}</label>
-          {{ form.purchase_price }}
-          <span>Ціна відповідно до обліку {{ product.purchase_price }}</span>
-      </li>
-      <li>
-          <label class="form-check-input" for="{{ form.non_cash.id_for_label }}" type="text">{{ form.non_cash.label_tag }}</label>
-          {{ form.non_cash }}
-          <span>За замовчуванням готівка</span>
-      </li>
-    </div>
-    <div class="form-column">
-      <li>
-          <label for="{{ form.amount.id_for_label }}" type="text">{{ form.amount.label_tag }}</label>
-          {{ form.amount }}
-          <span>Введіть кількість товару</span>
-      </li>
-    </div>
-    <div class="text-center">
-        <input class="btn btn-outline-success" type="submit" value="Закупити">
-    </div>
-  </form>
-</div>
-{% endblock %}
-
-{% block footer %}
-<footer class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
-    <div class="container">
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav" style="margin: 0 auto">
-                <li class="navbar-brand" style="color: #ED0000">
-                    <p style="padding: 0; margin: 0 auto">Безготівковий ліміт: {{ month_non_cash_limit }}</p>
+    <div class="form-wrapper">
+        <form method="post" class="form-style-7">
+            {% csrf_token %}
+            <h1>Створити закупівлю товару {{ product.name }}</h1>
+            <h6>Розмір: {{ product.size }}, Колір: {{ product.color }}</h6>
+            <div class="form-column">
+                <li>
+                    <label for="{{ form.purchase_price.id_for_label }}" type="text">{{ form.purchase_price.label_tag }}</label>
+                        {{ form.purchase_price }}
+                    <span>Ціна відповідно до обліку {{ product.purchase_price }}</span>
                 </li>
-            </ul>
-        </div>
+                <li>
+                    <label class="form-check-input" for="{{ form.non_cash.id_for_label }}" type="text">{{ form.non_cash.label_tag }}</label>
+                        {{ form.non_cash }}
+                    <span>За замовчуванням готівка</span>
+                </li>
+            </div>
+            <div class="form-column">
+                <li>
+                    <label for="{{ form.amount.id_for_label }}" type="text">{{ form.amount.label_tag }}</label>
+                        {{ form.amount }}
+                    <span>Введіть кількість товару</span>
+                </li>
+            </div>
+            <div class="text-center">
+                <input class="btn btn-outline-success" type="submit" value="Закупити">
+            </div>
+        </form>
     </div>
-</footer>
 {% endblock %}

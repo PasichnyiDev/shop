@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}<title>{{ title }}</title>{% endblock %}
+
 {% block css %}
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block nav_bar %}
+    {% if product_id %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'products:products-detail' pk=product_id %}">Повернутись до товару</a>
+        </li>
+    {% endif %}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
-            Фільтр
+        aria-haspopup="true" aria-expanded="false">
+        Фільтр
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="?period=day">День</a>
@@ -17,9 +24,17 @@
             <a class="dropdown-item" href="?period=month">Місяць</a>
             <a class="dropdown-item" href="?period=quarter">Квартал</a>
             <a class="dropdown-item" href="?period=year">Рік</a>
+            <a class="dropdown-item" href="?period=current_week">Поточний тиждень</a>
+            <a class="dropdown-item" href="?period=current_month">Поточний місяць</a>
+            <a class="dropdown-item" href="?period=current_year">Поточний рік</a>
         </div>
     </li>
-    <li><a class="btn btn-outline-danger ml-2" href="{% url 'transactions:sales-list' %}">Скинути</a></li>
+
+    {% if product_id %}
+        <li><a class="btn btn-outline-danger ml-2" href="{% url 'transactions:sales-list' product_id=product_id %}">Скинути</a></li>
+    {% else %}
+        <li><a class="btn btn-outline-danger ml-2" href="{% url 'transactions:sales-list' %}">Скинути</a></li>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -27,7 +42,7 @@
         <h2>Таблиця продаж</h2>
         <table class="fl-table">
             <thead>
-                <tr>
+                    <tr>
                     <th>Товар</th>
                     <th>Ціна товару</th>
                     <th>Ціна продажу</th>
@@ -53,18 +68,4 @@
             {% endfor %}
         </table>
     </div>
-{% endblock %}
-
-{% block footer %}
-<footer class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
-    <div class="container">
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav" style="margin: 0 auto">
-                <li class="navbar-brand" style="color: #ED0000">
-                    <p style="padding: 0; margin: 0 auto">Безготівковий ліміт: {{ month_non_cash_limit }}</p>
-                </li>
-            </ul>
-        </div>
-    </div>
-</footer>
 {% endblock %}
