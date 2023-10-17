@@ -41,11 +41,19 @@
 
         <h1>{{ product.name }}</h1>
         <h2>{{ product.brand }}</h2>
-        <p>Розмір: {{ product.size }}</p>
+        <h3>Розмір: {{ product.size }}</h3>
+        {% if sizes %}
+          <p>Доступні розміри: {% for product in sizes %} <a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.size }}</a>{% endfor %}</p>
+        {% endif %}
+        {% if sizes_out_of_stock %}
+          <p>
+              Розміри що закінчились: {% for product in sizes_out_of_stock %} <a href="{% url 'products:products-detail' pk=product.pk %}">
+              {{ product.size }}
+                </a> {% endfor %}
+          </p>
+        {% endif %}
         <p>Колір: {{ product.color }}</p>
         <p>Кількість: {{ product.in_stock_amount }}</p>
-        <br>
-        <br>
         <p>Ціна закупівлі: <b>{{ product.purchase_price }}</b></p>
         <p>Ціна продажу: <b>{{ product.selling_price }}</b></p>
 
@@ -56,7 +64,10 @@
 </div>
 
 <div class="button-container">
+    <a href="{% url 'products:create-similar' pk=product.pk %}" class="btn btn-outline-info">Додати розмір</a>
+    {% if product.in_stock_amount > 0 %}
     <a href="{% url 'transactions:sales-create' product_id=product.pk %}" class="btn btn-outline-success">Продати</a>
+    {% endif %}
     <a href="{% url 'transactions:purchases-create' product_id=product.pk %}" class="btn btn-outline-success">Закупити</a>
     <a href="{% url 'products:products-delete' pk=product.pk %}" class="btn btn-outline-danger">Видалити</a>
 </div>

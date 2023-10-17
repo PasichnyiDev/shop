@@ -6,7 +6,7 @@ from transactions.models import Sale
 
 class NonCashLimitContextMixin:
     def get_context_data(self, **kwargs):
-        month_limit = 90000
+        month_limit = 92000
         context = super().get_context_data(**kwargs)
         non_cash_sales_sum = self.get_non_cash_sales_sum()
         if non_cash_sales_sum:

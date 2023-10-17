@@ -1,4 +1,6 @@
 from django.db.models import Q, Sum
+from django.contrib import messages
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView, DeleteView
@@ -16,6 +18,36 @@ class ProductsCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
     success_url = reverse_lazy('products:products-list')
     title = 'Створити товар'
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Товар створено!')
+        return JsonResponse({'success': True})
+
+
+class CreateSimilarProductView(NonCashLimitContextMixin, CreateView):
+    model = Product
+    form_class = ProductsCreateForm
+    template_name = 'products-create.html'
+    success_url = reverse_lazy('products:products-list')
+    title = 'Створити схожий товар'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.creating_similar_product = True
+        return form
+
+    def get_initial(self):
+        initial = super().get_initial()
+        product = Product.objects.get(pk=self.kwargs['pk'])
+        initial['article'] = product.article
+        initial['name'] = product.name
+        initial['brand'] = product.brand
+        initial['color'] = product.color
+        initial['purchase_price'] = product.purchase_price
+        initial['selling_price'] = product.selling_price
+        initial['in_stock_amount'] = product.in_stock_amount
+        return initial
+
 
 class ProductsDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
     model = Product
@@ -26,7 +58,9 @@ class ProductsDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
-
+            sizes = Product.objects.filter(name=self.object.name).filter(in_stock_amount__gt=0)
+            context['sizes'] = sizes if len(sizes) >= 1 else None
+            context['sizes_out_of_stock'] = Product.objects.filter(name=self.object.name).filter(in_stock_amount__lt=1)
             context["object"] = self.object
             context_object_name = self.get_context_object_name(self.object)
 
@@ -106,6 +140,17 @@ class ProductsListView(TitleMixin, NonCashLimitContextMixin, ListView):
                 context['products'] = result
 
         return context
+
+    # @staticmethod
+    # def get_unique_products(queryset):
+    #     unique_products = []
+    #     unique_articles = []
+    #     for product in queryset:
+    #         if product.article not in unique_articles:
+    #             unique_products.append(product)
+    #             unique_articles.append(product.article)
+    #     return unique_products
+
 
     @staticmethod
     def check_transactions():

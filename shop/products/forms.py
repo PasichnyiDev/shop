@@ -3,6 +3,7 @@ from .models import Product, ProductCategory
 
 
 class ProductsCreateForm(forms.ModelForm):
+
     class Meta:
         model = Product
         fields = ['article', 'name', 'brand', 'color', 'size', 'purchase_price',

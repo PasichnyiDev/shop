@@ -8,6 +8,12 @@
 {% endblock %}
 
 {% block content %}
+        <div id="success-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Товар створено!</p>
+            </div>
+        </div>
     <div>
         <div class="form-wrapper">
         <h2>Створення товару</h2>
@@ -15,11 +21,6 @@
             {% csrf_token %}
         <ul>
             <div class="form-column">
-                <li>
-                    <label for="{{ form.article.id_for_label }}" type="text">{{ form.article.label_tag }}</label>
-                    {{ form.article }}
-                    <span>Введіть артикул товару</span>
-                </li>
                 <li>
                     <label for="{{ form.name.id_for_label }}" type="text">{{ form.name.label_tag }}</label>
                     {{ form.name }}
@@ -29,6 +30,11 @@
                     <label for="{{ form.brand.id_for_label }}" type="text">{{ form.brand.label_tag }}</label>
                     {{ form.brand }}
                     <span>Введіть бренд товару</span>
+                </li>
+                <li>
+                    <label for="{{ form.article.id_for_label }}" type="text">{{ form.article.label_tag }}</label>
+                    {{ form.article }}
+                    <span>Введіть артикул товару</span>
                 </li>
                 <li>
                     <label for="{{ form.color.id_for_label }}" type="text">{{ form.color.label_tag }}</label>
@@ -67,9 +73,61 @@
             </li>
         </ul>
         <div class="text-center">
+<!--            <input class="btn btn-outline-success" type="button" value="Добавить размер" id="add-size-button">-->
             <input class="btn btn-outline-success" type="submit" value="Створити">
         </div>
         </form>
     </div>
     </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('success-modal');
+    var closeButton = modal.querySelector('.close');
+
+    // Открывать модальное окно
+    function openModal() {
+        modal.style.display = 'block';
+    }
+
+    // Закрывать модальное окно
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    // Закрыть модальное окно при нажатии на крестик
+    closeButton.addEventListener('click', closeModal);
+
+    // Закрыть модальное окно при клике вне окна
+    window.addEventListener('click', function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    });
+
+    // Открывать модальное окно при успешной отправке формы
+    var form = document.querySelector('.form-style-7');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(form);
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', form.action, true);
+
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                // Успешный ответ от сервера
+                form.querySelector('[name=size]').value = ''; // Очистить поле размера
+                openModal(); // Открыть модальное окно
+            }
+        };
+
+        xhr.onerror = function() {
+            // Обработка ошибок при отправке запроса
+        };
+
+        xhr.send(formData);
+    });
+});
+</script>
 {% endblock %}

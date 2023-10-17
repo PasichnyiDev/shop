@@ -17,12 +17,12 @@
                     <th>Артикул</th>
                     <th>Назва</th>
                     <th>Бренд</th>
-<!--                    <th>Колір</th>-->
-<!--                    <th>Розмір</th>-->
+                    <th>Колір</th>
+                    <th>Розмір</th>
 <!--                    <th>Ціна закупівлі</th>-->
                     <th>Ціна продажу</th>
                     <th>В наявності</th>
-<!--                    <th>Категорія</th>-->
+                    <th>Категорія</th>
                 </tr>
             </thead>
 
@@ -32,24 +32,24 @@
                     <td>{{ product.article }}</td>
                     <td><a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.name }}</a></td>
                     <td>{{ product.brand }}</td>
-    <!--                    <td>{{ product.color }}</td>-->
-    <!--                    <td>{{ product.size }}</td>-->
-    <!--                    <td>{{ product.purchase_price }}</td>-->
+                    <td>{{ product.color }}</td>
+                    <td>{{ product.size }}</td>
+<!--                    <td>{{ product.purchase_price }}</td>-->
                     <td>{{ product.selling_price }}</td>
                     <td>{{ product.in_stock_amount }}</td>
-    <!--                <td>{{ product.category.name }}</td>-->
+                    <td>{{ product.category.name }}</td>
                 </tr>
             {% else %}
                 <tr>
                     <td>{{ product.article }}</td>
                     <td><a href="{% url 'products:products-detail' pk=product.pk %}">{{ product.name }}</a></td>
                     <td>{{ product.brand }}</td>
-    <!--                    <td>{{ product.color }}</td>-->
-    <!--                    <td>{{ product.size }}</td>-->
+                        <td>{{ product.color }}</td>
+                        <td>{{ product.size }}</td>
     <!--                    <td>{{ product.purchase_price }}</td>-->
                     <td>{{ product.selling_price }}</td>
                     <td>{{ product.in_stock_amount }}</td>
-    <!--                <td>{{ product.category.name }}</td>-->
+                    <td>{{ product.category.name }}</td>
                 </tr>
             {% endif %}
         {% endfor %}
