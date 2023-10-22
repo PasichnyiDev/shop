@@ -141,30 +141,20 @@ class ProductsListView(TitleMixin, NonCashLimitContextMixin, ListView):
 
         return context
 
-    # @staticmethod
-    # def get_unique_products(queryset):
-    #     unique_products = []
-    #     unique_articles = []
-    #     for product in queryset:
-    #         if product.article not in unique_articles:
-    #             unique_products.append(product)
-    #             unique_articles.append(product.article)
-    #     return unique_products
-
-
-    @staticmethod
-    def check_transactions():
-        return Sale.objects.last() or Purchase.objects.last()
+    def check_transactions(self):
+        return self.check_sales() or self.check_purchases()
 
     @staticmethod
     def check_sales():
-        if Sale.objects.last():
+        sales = Sale.objects.filter(is_active=True)
+        if sales.last():
             return True
         return False
 
     @staticmethod
     def check_purchases():
-        if Purchase.objects.last():
+        purchases = Purchase.objects.filter(is_active=True)
+        if purchases.last():
             return True
         return False
 

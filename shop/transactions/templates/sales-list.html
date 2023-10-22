@@ -50,6 +50,7 @@
                     <th>Кількість</th>
                     <th>Загальна вартість</th>
                     <th>Дата продажу</th>
+                    <th>Видалити</th>
                     <th>    </th>
                 </tr>
             </thead>
@@ -63,6 +64,7 @@
                     <td>{{ sale.amount }}</td>
                     <td>{{ sale.total_price }}</td>
                     <td>{{ sale.datetime_created|date:"d.m.Y H:i:s" }}</td>
+                    <td><a href="{% url 'transactions:sales-delete' sale_id=sale.pk %}" class="btn btn-outline-danger">Видалити</a></td>
                     <td><img src="{% static 'vendor/img/arrow_up.png' %}" width="32" height="32"></td>
                 </tr>
             {% endfor %}

@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.db.models import Sum
 
@@ -60,11 +61,12 @@ class SalesDeleteView(TitleMixin, NonCashLimitContextMixin, DeleteView):
     def form_valid(self, form):
         sale = self.get_object()
         product = sale.product
-
         product.in_stock_amount += sale.amount
         product.save()
-
-        return super().form_valid(form)
+        success_url = self.get_success_url()
+        sale.is_active = False
+        sale.save()
+        return HttpResponseRedirect(success_url)
 
 
 class SalesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin, ListView):
@@ -76,12 +78,9 @@ class SalesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriod
     def get_queryset(self):
         period = self.request.GET.get("period")
         product_id = self.kwargs.get('product_id')
-
+        queryset = self.model.objects.filter(is_active=True)
         if product_id:
-            queryset = self.model.objects.filter(product__id=product_id)
-        else:
-            queryset = self.model.objects.all()
-
+            queryset = queryset.filter(product__id=product_id)
         if period:
             queryset = self.filter_queryset_by_period(period=period, queryset=queryset)
 
@@ -140,13 +139,14 @@ class PurchasesDeleteView(TitleMixin, NonCashLimitContextMixin, DeleteView):
     title = 'Підтвердження видалення закупівлі'
 
     def form_valid(self, form):
-        sale = self.get_object()
-        product = sale.product
-
-        product.in_stock_amount -= sale.amount
+        purchase = self.get_object()
+        product = purchase.product
+        product.in_stock_amount -= purchase.amount
         product.save()
-
-        return super().form_valid(form)
+        success_url = self.get_success_url()
+        purchase.is_active = False
+        purchase.save()
+        return HttpResponseRedirect(success_url)
 
 
 class PurchasesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin, ListView):
@@ -158,12 +158,9 @@ class PurchasesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPe
     def get_queryset(self):
         period = self.request.GET.get("period")
         product_id = self.kwargs.get('product_id')
-
+        queryset = self.model.objects.filter(is_active=True)
         if product_id:
-            queryset = self.model.objects.filter(product__id=product_id)
-        else:
-            queryset = self.model.objects.all()
-
+            queryset = queryset.filter(product__id=product_id)
         if period:
             queryset = self.filter_queryset_by_period(period=period, queryset=queryset)
 
@@ -186,13 +183,12 @@ class TransactionsListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetB
 
         period = self.request.GET.get("period")
         product_id = self.kwargs.get('product_id')
+        sales = Sale.objects.filter(is_active=True)
+        purchases = Purchase.objects.filter(is_active=True)
 
         if product_id:
-            sales = Sale.objects.filter(product__id=product_id)
-            purchases = Purchase.objects.filter(product__id=product_id)
-        else:
-            sales = Sale.objects.all()
-            purchases = Purchase.objects.all()
+            sales = sales.filter(product__id=product_id)
+            purchases = purchases.filter(product__id=product_id)
 
         if period:
             sales = self.filter_queryset_by_period(period=period, queryset=sales)
@@ -219,8 +215,8 @@ class TransactionsTotalView(TitleMixin, NonCashLimitContextMixin, FilterQuerySet
         context = super().get_context_data()
         product_id = self.kwargs.get('product_id')
         period = self.request.GET.get("period")
-        sales = Sale.objects.all()
-        purchases = Purchase.objects.all()
+        sales = Sale.objects.filter(is_active=True)
+        purchases = Purchase.objects.filter(is_active=True)
         if product_id:
             context['product_id'] = product_id
             context['product'] = Product.objects.get(pk=product_id)
@@ -237,7 +233,7 @@ class TransactionsTotalView(TitleMixin, NonCashLimitContextMixin, FilterQuerySet
         context['sales_total_amount_sum'] = self.get_total_amount_sum(queryset=sales)
 
         context['purchases_total_non_cash_price_sum'] = self.get_total_price_sum(queryset=purchases, non_cash=True)
-        context['purchases_total_cash_price_sum'] = self.get_total_price_sum(queryset=purchases, non_cash=True)
+        context['purchases_total_cash_price_sum'] = self.get_total_price_sum(queryset=purchases, non_cash=False)
         context['purchases_total_sum'] = context['purchases_total_non_cash_price_sum'] + \
                                          context['purchases_total_cash_price_sum']
         context['purchases_total_amount_sum'] = self.get_total_amount_sum(queryset=purchases)

@@ -9,6 +9,7 @@ class Sale(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=10, decimal_places=2)
     non_cash = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -21,6 +22,7 @@ class Purchase(models.Model):
     amount = models.IntegerField(default=1)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     non_cash = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
 
     def __str__(self):

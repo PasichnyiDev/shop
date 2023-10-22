@@ -35,7 +35,7 @@
       <img src="{% static 'vendor/img/default-upload-image.jpg' %}">
     </div>
 
-    <div class="product-info">
+    <div class="product-info" {% if product.in_stock_amount < 1 %}style="background-color: #ffffcc"{% endif %}>
 
       <div class="product-text">
 
