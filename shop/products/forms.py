@@ -34,3 +34,14 @@ class ProductsCategoryCreateForm(forms.ModelForm):
         labels = {
             'name': 'Назва категорії',
         }
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+
+        if not name:
+            raise forms.ValidationError('Це поле обов\'язкове для заповнення.')
+
+        if ProductCategory.objects.filter(name=name).exists():
+            raise forms.ValidationError('Категорія з такою назвою вже існує.')
+
+        return name

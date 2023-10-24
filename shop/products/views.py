@@ -58,9 +58,9 @@ class ProductsDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
-            sizes = Product.objects.filter(name=self.object.name).filter(in_stock_amount__gt=0)
+            sizes = self.get_available_sizes()
             context['sizes'] = sizes if len(sizes) >= 1 else None
-            context['sizes_out_of_stock'] = Product.objects.filter(name=self.object.name).filter(in_stock_amount__lt=1)
+            context['sizes_out_of_stock'] = self.get_out_of_stock_sizes()
             context["object"] = self.object
             context_object_name = self.get_context_object_name(self.object)
 
@@ -72,6 +72,14 @@ class ProductsDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
             context['product_have_purchases'] = self.product_have_purchases()
 
         return context
+
+    def get_available_sizes(self):
+        return Product.objects.filter(name=self.object.name).filter(brand=self.object.brand)\
+            .filter(color=self.object.color).filter(in_stock_amount__gt=0)
+
+    def get_out_of_stock_sizes(self):
+        return Product.objects.filter(name=self.object.name).filter(brand=self.object.brand)\
+            .filter(color=self.object.color).filter(in_stock_amount__lt=1)
 
     def product_have_sales(self):
         return Sale.objects.filter(product__id=self.object.pk).count() > 0
