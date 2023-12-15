@@ -4,14 +4,15 @@ from django.db.models import Sum
 
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, TemplateView
 
-from shop.mixins import TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin
+from shop.mixins import TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin, \
+                        TotalProductsPurchasePriceMixin
 
 from products.models import Product
 from .models import Sale, Purchase
 from .forms import SaleForm, PurchaseForm
 
 
-class SalesCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
+class SalesCreateView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, CreateView):
     model = Sale
     form_class = SaleForm
     template_name = 'sales-create.html'
@@ -43,7 +44,7 @@ class SalesCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
         return Product.objects.get(pk=self.kwargs['product_id'])
 
 
-class SalesDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
+class SalesDetailView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, DetailView):
     model = Sale
     template_name = 'sales-detail.html'
     context_object_name = 'sale'
@@ -51,7 +52,7 @@ class SalesDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
     title = 'Інформація про продажу'
 
 
-class SalesDeleteView(TitleMixin, NonCashLimitContextMixin, DeleteView):
+class SalesDeleteView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, DeleteView):
     model = Sale
     success_url = reverse_lazy('products:products-list')
     template_name = 'sales-confirm-delete.html'
@@ -69,7 +70,8 @@ class SalesDeleteView(TitleMixin, NonCashLimitContextMixin, DeleteView):
         return HttpResponseRedirect(success_url)
 
 
-class SalesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin, ListView):
+class SalesListView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin,
+                    ListView):
     model = Sale
     template_name = 'sales-list.html'
     context_object_name = 'sales'
@@ -94,7 +96,7 @@ class SalesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriod
         return context
 
 
-class PurchasesCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
+class PurchasesCreateView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, CreateView):
     model = Purchase
     form_class = PurchaseForm
     template_name = 'purchases-create.html'
@@ -123,7 +125,7 @@ class PurchasesCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
         return Product.objects.get(pk=self.kwargs['product_id'])
 
 
-class PurchasesDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
+class PurchasesDetailView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, DetailView):
     model = Purchase
     template_name = 'purchases-detail.html'
     context_object_name = 'purchase'
@@ -131,7 +133,7 @@ class PurchasesDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
     title = 'Інформація про закупівлю'
 
 
-class PurchasesDeleteView(TitleMixin, NonCashLimitContextMixin, DeleteView):
+class PurchasesDeleteView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, DeleteView):
     model = Purchase
     success_url = reverse_lazy('products:products-list')
     template_name = 'purchases-confirm-delete.html'
@@ -149,7 +151,8 @@ class PurchasesDeleteView(TitleMixin, NonCashLimitContextMixin, DeleteView):
         return HttpResponseRedirect(success_url)
 
 
-class PurchasesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin, ListView):
+class PurchasesListView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin,
+                        FilterQuerySetByPeriodMixin, ListView):
     model = Purchase
     template_name = 'purchases-list.html'
     context_object_name = 'purchases'
@@ -174,7 +177,8 @@ class PurchasesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPe
         return context
 
 
-class TransactionsListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin, ListView):
+class TransactionsListView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin,
+                           FilterQuerySetByPeriodMixin, ListView):
     template_name = 'transactions-list.html'
     context_object_name = 'transactions'
     title = 'Список транзакцій'
@@ -207,7 +211,8 @@ class TransactionsListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetB
         return context
 
 
-class TransactionsTotalView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriodMixin, TemplateView):
+class TransactionsTotalView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin,
+                            FilterQuerySetByPeriodMixin, TemplateView):
     template_name = 'transactions-total.html'
     title = 'Узагальнені відомості про транзакції'
 
