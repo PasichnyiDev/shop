@@ -1,11 +1,12 @@
+from django.shortcuts import get_object_or_404
 from django.db.models import Q, Sum
 from django.contrib import messages
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView, DetailView, DeleteView
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from .models import Product, ProductCategory
-from .forms import ProductsCreateForm, ProductsCategoryCreateForm
+from .forms import ProductsCreateForm, ProductsCategoryCreateForm, ProductsUpdateForm
 
 from shop.mixins import NonCashLimitContextMixin, TitleMixin
 from transactions.models import Sale, Purchase
@@ -22,6 +23,19 @@ class ProductsCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
         response = super().form_valid(form)
         messages.success(self.request, 'Товар створено!')
         return JsonResponse({'success': True})
+
+
+class ProductsUpdateView(TitleMixin, NonCashLimitContextMixin, UpdateView):
+    model = Product
+    form_class = ProductsUpdateForm
+    template_name = 'products-update.html'
+    success_url = reverse_lazy('products:products-list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = get_object_or_404(Product, pk=self.kwargs['pk'])
+        context['object'] = product
+        return context
 
 
 class CreateSimilarProductView(NonCashLimitContextMixin, CreateView):

@@ -27,6 +27,21 @@ class ProductsCreateForm(forms.ModelForm):
         }
 
 
+class ProductsUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['article', 'purchase_price', 'selling_price']
+        labels = {
+            'article': 'Артикул',
+            'purchase_price': 'Ціна закупівлі',
+            'selling_price': 'Ціна продажу',
+        }
+        widgets = {
+            'purchase_price': forms.TextInput(attrs={'type': 'number', 'step': '0.01'}),
+            'selling_price': forms.TextInput(attrs={'type': 'number', 'step': '0.01'}),
+        }
+
+
 class ProductsCategoryCreateForm(forms.ModelForm):
     class Meta:
         model = ProductCategory

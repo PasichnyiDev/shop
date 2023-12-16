@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}<title>{{ title }}</title>{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/create-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="form-wrapper">
+            <h2>Оновлення товару</h2>
+            <h2>{{ object.name }}</h2>
+            <form method="post" class="form-style-7">
+                {% csrf_token %}
+                <ul>
+                    <div class="form-column">
+                        <li>
+                            <label for="{{ form.article.id_for_label }}" type="text">{{ form.article.label_tag }}</label>
+                            {{ form.article }}
+                            <span>Введіть артикул товару</span>
+                        </li>
+                        <li>
+                            <label for="{{ form.purchase_price.id_for_label }}">{{ form.purchase_price.label_tag }}</label>
+                            {{ form.purchase_price }}
+                            <span>Введіть закупівельну вартість товару</span>
+                        </li>
+                        <li>
+                            <label for="{{ form.selling_price.id_for_label }}">{{ form.selling_price.label_tag }}</label>
+                            {{ form.selling_price }}
+                            <span>Введіть вартість продажу товару</span>
+                        </li>
+                    </div>
+                    <!-- Остальные поля только для просмотра -->
+                    <div class="form-column">
+                        <li>
+                            <label for="{{ form.brand.id_for_label }}">{{ form.brand.label_tag }}</label>
+                            {{ form.brand }}
+                            <input type="text" id="brand" value="{{ object.brand }}" readonly>
+                            <span>Бренд</span>
+                        </li>
+                        <li>
+                            <label for="color">{{ form.color.label_tag }}</label>
+                            <input type="text" id="color" value="{{ object.color }}" readonly>
+                            <span>Колір</span>
+                        </li>
+                        <li>
+                            <label for="size">{{ form.size.label_tag }}</label>
+                            <input type="text" id="size" value="{{ object.size }}" readonly>
+                            <span>Розмір</span>
+                        </li>
+                    </div>
+                </ul>
+                <div class="text-center">
+                    <input class="btn btn-outline-success" type="submit" value="Оновити">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

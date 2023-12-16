@@ -64,6 +64,7 @@
 </div>
 
 <div class="button-container">
+    <a href="{% url 'products:products-update' pk=product.pk %}" class="btn btn-outline-secondary">Змінити</a>
     <a href="{% url 'products:create-similar' pk=product.pk %}" class="btn btn-outline-info">Додати розмір</a>
     {% if product.in_stock_amount > 0 %}
     <a href="{% url 'transactions:sales-create' product_id=product.pk %}" class="btn btn-outline-success">Продати</a>
