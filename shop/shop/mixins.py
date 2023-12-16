@@ -2,7 +2,6 @@ from django.db.models import Sum
 from django.db.models.query import QuerySet
 from django.utils import timezone
 from transactions.models import Sale
-from products.models import Product
 
 
 class NonCashLimitContextMixin:
@@ -77,18 +76,3 @@ class FilterQuerySetByPeriodMixin:
         else:
             start_date = end_date.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
         return queryset.filter(datetime_created__range=(start_date, end_date))
-
-
-class TotalProductsPurchasePriceMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['total_products_purchase_price'] = self.get_total_products_purchase_price()
-        return context
-
-    def get_total_products_purchase_price(self):
-        total_purchase_price = 0
-        products = Product.objects.all()
-        for product in products:
-            current_purchase_price = product.purchase_price * product.in_stock_amount
-            total_purchase_price += current_purchase_price
-        return total_purchase_price

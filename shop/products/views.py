@@ -7,11 +7,11 @@ from django.views.generic import ListView, DetailView, DeleteView
 from .models import Product, ProductCategory
 from .forms import ProductsCreateForm, ProductsCategoryCreateForm
 
-from shop.mixins import NonCashLimitContextMixin, TitleMixin, TotalProductsPurchasePriceMixin
+from shop.mixins import NonCashLimitContextMixin, TitleMixin
 from transactions.models import Sale, Purchase
 
 
-class ProductsCreateView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, CreateView):
+class ProductsCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
     model = Product
     form_class = ProductsCreateForm
     template_name = 'products-create.html'
@@ -24,7 +24,7 @@ class ProductsCreateView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLim
         return JsonResponse({'success': True})
 
 
-class CreateSimilarProductView(TotalProductsPurchasePriceMixin, NonCashLimitContextMixin, CreateView):
+class CreateSimilarProductView(NonCashLimitContextMixin, CreateView):
     model = Product
     form_class = ProductsCreateForm
     template_name = 'products-create.html'
@@ -49,7 +49,7 @@ class CreateSimilarProductView(TotalProductsPurchasePriceMixin, NonCashLimitCont
         return initial
 
 
-class ProductsDetailView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, DetailView):
+class ProductsDetailView(TitleMixin, NonCashLimitContextMixin, DetailView):
     model = Product
     template_name = 'products-detail.html'
     context_object_name = 'product'
@@ -91,14 +91,14 @@ class ProductsDetailView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLim
         return self.product_have_sales() or self.product_have_purchases()
 
 
-class ProductsDeleteView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, DeleteView):
+class ProductsDeleteView(TitleMixin, NonCashLimitContextMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('products:products-list')
     template_name = 'products-confirm-delete.html'
     title = 'Підтвердження видалення'
 
 
-class ProductsListView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, ListView):
+class ProductsListView(TitleMixin, NonCashLimitContextMixin, ListView):
     model = Product
     template_name = 'products-list.html'
     context_object_name = 'products'
@@ -118,6 +118,7 @@ class ProductsListView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimit
         context['is_transactions'] = self.check_transactions()
         context['sales'] = self.check_sales()
         context['purchases'] = self.check_purchases()
+        context['stat'] = True
 
         search_query = self.request.GET.get('search')
         if search_query:
@@ -173,7 +174,7 @@ class ProductsListView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimit
         return False
 
 
-class ProductsCategoryCreateView(TotalProductsPurchasePriceMixin, TitleMixin, NonCashLimitContextMixin, CreateView):
+class ProductsCategoryCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
     model = ProductCategory
     form_class = ProductsCategoryCreateForm
     template_name = 'products-category-create.html'

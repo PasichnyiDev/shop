@@ -1,0 +1,22 @@
+body {
+    font-family: Helvetica, serif;
+    -webkit-font-smoothing: antialiased;
+    background: rgba(71, 147, 227, 1);
+}
+
+.card-stat-container {
+    margin-top: 150px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.card-stat {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    min-height: 200px;
+    max-width: 250px;
+    margin-right: 10px
+}

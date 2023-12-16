@@ -33,6 +33,14 @@
             <ul class="navbar-nav ml-auto">
                 {% block nav_bar %}
                 {% endblock %}
+                {% if stat %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'stat-main' %}" role="button"
+                            aria-haspopup="true" aria-expanded="false">
+                            Статистика
+                        </a>
+                    </li>
+                {% endif %}
                 {% if categories and products %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -97,9 +105,6 @@
             <ul class="navbar-nav" style="margin: 0 auto; display: flex; align-items: space-between;">
                 <li class="navbar-brand">
                     <p>Безготівковий ліміт: {{ month_non_cash_limit }}</p>
-                </li>
-                <li class="navbar-brand">
-                    <p>Загальна вартість товарів: {{ total_products_purchase_price }}</p>
                 </li>
             </ul>
         </div>
