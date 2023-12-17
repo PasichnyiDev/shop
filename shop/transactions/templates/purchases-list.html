@@ -54,7 +54,11 @@
             </thead>
 
         {% for purchase in purchases %}
-            <tr>
+            {% if purchase.non_cash %}
+                <tr style="background-color: #62d982">
+            {% else %}
+                <tr>
+            {% endif %}
                 <td><a href="{% url 'products:products-detail' pk=purchase.product.pk %}">{{ purchase.product.name }}</a></td>
                 <td>{{ purchase.product.purchase_price }}</td>
                 <td>{{ purchase.purchase_price }}</td>

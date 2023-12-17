@@ -63,24 +63,29 @@
             </thead>
 
         {% for transaction in transactions %}
-            <tr>
-                <td>
-                    <a href="{% url 'products:products-detail' pk=transaction.product.pk %}">{{ transaction.product.name }}</a>
-                </td>
-                {% if transaction.selling_price %}
-                    <td>Продажа</td>
-                {% else %}
-                    <td>Закупівля</td>
-                {% endif %}
-                <td>{{ transaction.total_price }}</td>
-                <td>{{ transaction.amount }}</td>
-                <td>{{ transaction.datetime_created|date:"d.m.Y H:i:s" }}</td>
-                {% if transaction.selling_price %}
-                    <td><img src="{% static 'vendor/img/arrow_up.png' %}" width="32" height="32"></td>
-                {% else %}
-                    <td><img src="{% static 'vendor/img/arrow_down.png' %}" width="32" height="32"></td>
+            {% if transaction.non_cash %}
+                <tr style="background-color: #62d982">
+            {% else %}
+                <tr>
             {% endif %}
-            </tr>
+                    <td>
+                        <a href="{% url 'products:products-detail' pk=transaction.product.pk %}">{{ transaction.product.name }}</a>
+                    </td>
+                    {% if transaction.selling_price %}
+                        <td>Продажа</td>
+                    {% else %}
+                        <td>Закупівля</td>
+                    {% endif %}
+                    <td>{{ transaction.total_price }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.datetime_created|date:"d.m.Y H:i:s" }}</td>
+                    {% if transaction.selling_price %}
+                        <td><img src="{% static 'vendor/img/arrow_up.png' %}" width="32" height="32"></td>
+                    {% else %}
+                        <td><img src="{% static 'vendor/img/arrow_down.png' %}" width="32" height="32"></td>
+                    {% endif %}
+                </tr>
+
         {% endfor %}
         </table>
     </div>
