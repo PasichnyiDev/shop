@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.db.models import Sum
@@ -181,8 +183,11 @@ class TransactionsListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetB
 
     def get_queryset(self):
 
+        start_date = self.request.GET.get("start_date")
+        end_date = self.request.GET.get("end_date")
         period = self.request.GET.get("period")
         product_id = self.kwargs.get('product_id')
+
         sales = Sale.objects.filter(is_active=True)
         purchases = Purchase.objects.filter(is_active=True)
 
@@ -193,6 +198,12 @@ class TransactionsListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetB
         if period:
             sales = self.filter_queryset_by_period(period=period, queryset=sales)
             purchases = self.filter_queryset_by_period(period=period, queryset=purchases)
+
+        if start_date:
+            if not end_date:
+                end_date = datetime.date.today()
+            sales = self.filter_queryset_by_dates(start_date=start_date, end_date=end_date, queryset=sales)
+            purchases = self.filter_queryset_by_dates(start_date=start_date, end_date=end_date, queryset=purchases)
 
         combined_queryset = list(sales) + list(purchases)
         combined_queryset.sort(key=lambda x: x.datetime_created, reverse=True)

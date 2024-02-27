@@ -76,3 +76,9 @@ class FilterQuerySetByPeriodMixin:
         else:
             start_date = end_date.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
         return queryset.filter(datetime_created__range=(start_date, end_date))
+
+    @staticmethod
+    def filter_queryset_by_dates(start_date, end_date, queryset):
+        if start_date and end_date:
+            queryset = queryset.filter(datetime_created__date__gte=start_date, datetime_created__date__lte=end_date)
+        return queryset
