@@ -40,6 +40,17 @@
 {% block content %}
     <div class="table-wrapper">
         <h2>Таблиця продаж</h2>
+        <div class="bg-dark table-date-filter">
+            <form method="get">
+            <label class="filter-date-label form-label" for="start_date">Початок:</label>
+            <input type="date" id="start_date" name="start_date">
+
+            <label class="filter-date-label form-label" for="end_date">Кінець:</label>
+            <input type="date" id="end_date" name="end_date">
+
+            <button class="btn btn-outline-secondary" type="submit">Фільтрувати</button>
+            </form>
+        </div>
         <table class="fl-table">
             <thead>
                     <tr>

@@ -78,6 +78,8 @@ class SalesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriod
     title = 'Список продаж'
 
     def get_queryset(self):
+        start_date = self.request.GET.get("start_date")
+        end_date = self.request.GET.get("end_date")
         period = self.request.GET.get("period")
         product_id = self.kwargs.get('product_id')
         queryset = self.model.objects.filter(is_active=True)
@@ -85,6 +87,10 @@ class SalesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriod
             queryset = queryset.filter(product__id=product_id)
         if period:
             queryset = self.filter_queryset_by_period(period=period, queryset=queryset)
+        if start_date:
+            if not end_date:
+                end_date = datetime.date.today()
+            queryset = self.filter_queryset_by_dates(start_date=start_date, end_date=end_date, queryset=queryset)
 
         return queryset
 
@@ -158,6 +164,8 @@ class PurchasesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPe
     title = 'Список закупівель'
 
     def get_queryset(self):
+        start_date = self.request.GET.get("start_date")
+        end_date = self.request.GET.get("end_date")
         period = self.request.GET.get("period")
         product_id = self.kwargs.get('product_id')
         queryset = self.model.objects.filter(is_active=True)
@@ -165,6 +173,10 @@ class PurchasesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPe
             queryset = queryset.filter(product__id=product_id)
         if period:
             queryset = self.filter_queryset_by_period(period=period, queryset=queryset)
+        if start_date:
+            if not end_date:
+                end_date = datetime.date.today()
+            queryset = self.filter_queryset_by_dates(start_date=start_date, end_date=end_date, queryset=queryset)
 
         return queryset
 
