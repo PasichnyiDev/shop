@@ -237,6 +237,8 @@ class TransactionsTotalView(TitleMixin, NonCashLimitContextMixin, FilterQuerySet
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         product_id = self.kwargs.get('product_id')
+        start_date = self.request.GET.get("start_date")
+        end_date = self.request.GET.get("end_date")
         period = self.request.GET.get("period")
         sales = Sale.objects.filter(is_active=True)
         purchases = Purchase.objects.filter(is_active=True)
@@ -249,6 +251,12 @@ class TransactionsTotalView(TitleMixin, NonCashLimitContextMixin, FilterQuerySet
         if period:
             sales = self.filter_queryset_by_period(period=period, queryset=sales)
             purchases = self.filter_queryset_by_period(period=period, queryset=purchases)
+
+        if start_date:
+            if not end_date:
+                end_date = datetime.date.today()
+            sales = self.filter_queryset_by_dates(start_date=start_date, end_date=end_date, queryset=sales)
+            purchases = self.filter_queryset_by_dates(start_date=start_date, end_date=end_date, queryset=purchases)
 
         context['sales_total_non_cash_price_sum'] = self.get_total_price_sum(queryset=sales, non_cash=True)
         context['sales_total_cash_price_sum'] = self.get_total_price_sum(queryset=sales, non_cash=False)

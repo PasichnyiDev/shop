@@ -4,6 +4,7 @@
 {% block title %}<title>{{ title }}</title>{% endblock %}
 
 {% block css %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'css/detail-styles.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/sales-list-styles.css' %}">
 {% endblock %}
@@ -14,6 +15,17 @@
             <a class="nav-link" href="{% url 'products:products-detail' pk=product_id %}">Повернутись до товару</a>
         </li>
     {% endif %}
+    <div class="bg-dark table-date-filter">
+        <form method="get">
+        <label class="filter-date-label form-label" for="start_date">Початок:</label>
+        <input type="date" id="start_date" name="start_date">
+
+        <label class="filter-date-label form-label" for="end_date">Кінець:</label>
+        <input type="date" id="end_date" name="end_date">
+
+        <button class="btn btn-outline-secondary" type="submit">Фільтрувати</button>
+        </form>
+        </div>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
