@@ -20,7 +20,6 @@ class NonCashLimitContextMixin:
         if sales:
             end_date = timezone.now()
             start_date = end_date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-            print(start_date)
             filtered_sales = sales.filter(datetime_created__range=(start_date, end_date))
             total_price_sum_non_cash = filtered_sales.filter(non_cash=True).aggregate(
                 total_price_sum=Sum('total_price'))['total_price_sum']

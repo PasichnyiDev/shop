@@ -20,7 +20,7 @@ class ProductsCreateForm(forms.ModelForm):
             'category': 'Категорія',
         }
         widgets = {
-            'in_stock_amount': forms.NumberInput(attrs={'min': 1}),
+            'in_stock_amount': forms.NumberInput(attrs={'min': 0}),
             'category': forms.Select(),
             'purchase_price': forms.TextInput(attrs={'type': 'number', 'step': '0.01'}),
             'selling_price': forms.TextInput(attrs={'type': 'number', 'step': '0.01'}),
