@@ -92,6 +92,14 @@
                     </form>
                 </li>
                 {% endif %}
+                {% if product_id %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products:products-detail' pk=product_id %}" role="button"
+                            aria-haspopup="true" aria-expanded="false">
+                            Повернутись до товару
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

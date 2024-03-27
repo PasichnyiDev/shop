@@ -45,6 +45,12 @@ class CreateSimilarProductView(NonCashLimitContextMixin, CreateView):
     success_url = reverse_lazy('products:products-list')
     title = 'Створити схожий товар'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = get_object_or_404(Product, pk=self.kwargs['pk'])
+        context['product_id'] = product.pk
+        return context
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.creating_similar_product = True
