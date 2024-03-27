@@ -54,6 +54,7 @@ class CreateSimilarProductView(NonCashLimitContextMixin, CreateView):
         initial = super().get_initial()
         product = Product.objects.get(pk=self.kwargs['pk'])
         initial['article'] = product.article
+        initial['category'] = product.category
         initial['name'] = product.name
         initial['brand'] = product.brand
         initial['color'] = product.color
