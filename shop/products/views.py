@@ -25,6 +25,28 @@ class ProductsCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
         return JsonResponse({'success': True})
 
 
+class ProductsCreateAndPurchaseView(TitleMixin, NonCashLimitContextMixin, CreateView):
+    model = Product
+    form_class = ProductsCreateForm
+    template_name = 'products-create.html'
+    success_url = reverse_lazy('products:products-list')
+    title = 'Створити та закупити товар'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        obj = form.instance
+        purchase = Purchase.objects.create(
+            purchase_price=obj.purchase_price,
+            amount=obj.in_stock_amount,
+            total_price=round((obj.purchase_price * obj.in_stock_amount), 2),
+            product=Product.objects.get(pk=obj.pk)
+        )
+        purchase.save()
+        obj.save()
+
+        return response
+
+
 class ProductsUpdateView(TitleMixin, NonCashLimitContextMixin, UpdateView):
     model = Product
     form_class = ProductsUpdateForm
