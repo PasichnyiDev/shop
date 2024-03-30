@@ -106,8 +106,11 @@ class PurchasesCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):
     model = Purchase
     form_class = PurchaseForm
     template_name = 'purchases-create.html'
-    success_url = reverse_lazy('products:products-list')
     title = 'Створити закупівлю'
+
+    def get_success_url(self):
+        pk = self.get_product_from_route().pk
+        return reverse_lazy('products:products-detail', kwargs={'pk': pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
