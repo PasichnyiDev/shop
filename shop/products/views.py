@@ -78,6 +78,19 @@ class CreateSimilarProductView(NonCashLimitContextMixin, CreateView):
         form.creating_similar_product = True
         return form
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        obj = form.instance
+        purchase = Purchase.objects.create(
+            purchase_price=obj.purchase_price,
+            amount=obj.in_stock_amount,
+            total_price=round((obj.purchase_price * obj.in_stock_amount), 2),
+            product=Product.objects.get(pk=obj.pk)
+        )
+        purchase.save()
+        obj.save()
+        return response
+
     def get_initial(self):
         initial = super().get_initial()
         product = Product.objects.get(pk=self.kwargs['pk'])
