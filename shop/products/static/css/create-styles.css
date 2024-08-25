@@ -18,8 +18,10 @@ h2 {
 }
 
 .form-style-7{
-	max-width:1000px;
+	max-width:90%;
+	max-height:80%;
 	margin:10px auto;
+	margin-bottom:10%;
 	background:#fff;
 	border-radius:7px;
 	padding:20px;
