@@ -159,14 +159,50 @@ class ProductsListView(TitleMixin, NonCashLimitContextMixin, ListView):
     template_name = 'products-list.html'
     context_object_name = 'products'
     title = 'Список товарів'
+    paginate_by = 20
+
+    def get_queryset(self):
+        queryset = Product.objects.all()
+
+        # Фильтр по категории
+        category_id = self.request.GET.get('category')
+        if category_id:
+            queryset = queryset.filter(category__id=category_id)
+
+        # Поиск
+        search_query = self.request.GET.get('search')
+        if search_query:
+            filters = Q(article__icontains=search_query) | \
+                      Q(name__icontains=search_query) | \
+                      Q(brand__icontains=search_query) | \
+                      Q(color__icontains=search_query) | \
+                      Q(size__icontains=search_query) | \
+                      Q(purchase_price__icontains=search_query) | \
+                      Q(selling_price__icontains=search_query) | \
+                      Q(in_stock_amount__icontains=search_query) | \
+                      Q(category__name__icontains=search_query)
+
+            queryset = queryset.filter(filters)
+
+            if not queryset.exists():
+                # Попытка с заглавной буквы
+                search_cap = search_query.capitalize()
+                filters = Q(article__icontains=search_cap) | \
+                          Q(name__icontains=search_cap) | \
+                          Q(brand__icontains=search_cap) | \
+                          Q(color__icontains=search_cap) | \
+                          Q(size__icontains=search_cap) | \
+                          Q(purchase_price__icontains=search_cap) | \
+                          Q(selling_price__icontains=search_cap) | \
+                          Q(in_stock_amount__icontains=search_cap) | \
+                          Q(category__name__icontains=search_cap)
+                queryset = Product.objects.all().filter(filters)
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = ProductCategory.objects.all()
-
-        category_id = self.request.GET.get('category')
-        if category_id:
-            context['products'] = context['products'].filter(category__id=category_id)
 
         context['search_bar'] = self.check_search_bar()
         context['add_product'] = True
@@ -176,34 +212,6 @@ class ProductsListView(TitleMixin, NonCashLimitContextMixin, ListView):
         context['purchases'] = self.check_purchases()
         context['stat'] = True
 
-        search_query = self.request.GET.get('search')
-        if search_query:
-            result = context['products'].filter(
-                Q(article__icontains=search_query) |
-                Q(name__icontains=search_query) |
-                Q(brand__icontains=search_query) |
-                Q(color__icontains=search_query) |
-                Q(size__icontains=search_query) |
-                Q(purchase_price__icontains=search_query) |
-                Q(selling_price__icontains=search_query) |
-                Q(in_stock_amount__icontains=search_query) |
-                Q(category__name__icontains=search_query)
-            )
-            if not result:
-                result = context['products'].filter(
-                Q(article__icontains=search_query.capitalize()) |
-                Q(name__icontains=search_query.capitalize()) |
-                Q(brand__icontains=search_query.capitalize()) |
-                Q(color__icontains=search_query.capitalize()) |
-                Q(size__icontains=search_query.capitalize()) |
-                Q(purchase_price__icontains=search_query.capitalize()) |
-                Q(selling_price__icontains=search_query.capitalize()) |
-                Q(in_stock_amount__icontains=search_query.capitalize()) |
-                Q(category__name__icontains=search_query.capitalize())
-            )
-            if result:
-                context['products'] = result
-
         return context
 
     def check_transactions(self):
@@ -211,23 +219,15 @@ class ProductsListView(TitleMixin, NonCashLimitContextMixin, ListView):
 
     @staticmethod
     def check_sales():
-        sales = Sale.objects.filter(is_active=True)
-        if sales.last():
-            return True
-        return False
+        return Sale.objects.filter(is_active=True).exists()
 
     @staticmethod
     def check_purchases():
-        purchases = Purchase.objects.filter(is_active=True)
-        if purchases.last():
-            return True
-        return False
+        return Purchase.objects.filter(is_active=True).exists()
 
     @staticmethod
     def check_search_bar():
-        if Product.objects.last():
-            return True
-        return False
+        return Product.objects.exists()
 
 
 class ProductsCategoryCreateView(TitleMixin, NonCashLimitContextMixin, CreateView):

@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cache %}
 
 {% block title %}<title>{{ title }}</title>{% endblock %}
 
-{% block css %}
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-{% endblock %}
+{% cache 86400 transactions_list_cache %}
+    {% block css %}
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    {% endblock %}
+{% endcache %}
 
 {% block nav_bar %}
     {% if product_id %}
@@ -49,7 +52,7 @@
 
 {% block content %}
     <div class="table-wrapper">
-        <h2>Таблиця транзакцій</h2>
+<!--        <h2>Таблиця транзакцій</h2>-->
         <div class="bg-dark table-date-filter">
             <form method="get">
             <label class="form-label filter-date-label" for="start_date">Початок:</label>

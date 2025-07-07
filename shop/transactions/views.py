@@ -195,6 +195,7 @@ class TransactionsListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetB
     template_name = 'transactions-list.html'
     context_object_name = 'transactions'
     title = 'Список транзакцій'
+    paginate_by = 20
 
     def get_queryset(self):
 
