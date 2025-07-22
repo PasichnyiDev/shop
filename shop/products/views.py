@@ -159,7 +159,7 @@ class ProductsListView(TitleMixin, NonCashLimitContextMixin, ListView):
     template_name = 'products-list.html'
     context_object_name = 'products'
     title = 'Список товарів'
-    paginate_by = 20
+    paginate_by = 50
 
     def get_queryset(self):
         queryset = Product.objects.all()
