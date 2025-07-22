@@ -1,26 +1,24 @@
 {% load static %}
-{% load cache %}
 
 <!DOCTYPE html>
 <html lang="en">
 
-{% cache 86400 base_cache %}
-    <head>
+<head>
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        {% block title %}{% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {% block title %}{% endblock %}
 
-        <!-- Bootstrap core CSS -->
-         <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 
-        <!-- Custom styles for this template -->
-        {% block css %} {% endblock %}
+    <!-- Custom styles for this template -->
+    {% block css %} {% endblock %}
 
-    </head>
-{% endcache %}
+</head>
 
 <body>
 
@@ -104,9 +102,9 @@
 
 {% block content %} {% endblock %}
 
-<footer class="footer">
+<footer class="bg-dark footer">
   <div class="footer-container">
-    <div class="footer-limit">
+    <div class="navbar-brand">
       Безготівковий ліміт: {{ month_non_cash_limit }}
     </div>
 

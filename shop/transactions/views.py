@@ -76,6 +76,7 @@ class SalesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriod
     template_name = 'sales-list.html'
     context_object_name = 'sales'
     title = 'Список продаж'
+    paginate_by = 20
 
     def get_queryset(self):
         start_date = self.request.GET.get("start_date")
@@ -165,6 +166,7 @@ class PurchasesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPe
     template_name = 'purchases-list.html'
     context_object_name = 'purchases'
     title = 'Список закупівель'
+    paginate_by = 20
 
     def get_queryset(self):
         start_date = self.request.GET.get("start_date")

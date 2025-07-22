@@ -7,25 +7,27 @@
 {% endblock %}
 
 {% block content %}
+<div class="page-center-wrapper">
     <div class="card-stat-container">
-       <div class="card-stat">
-           <h2>Загальна закупівельна вартість</h2>
-           <p>{{ total_purchase_price }}</p>
-       </div>
+   <div class="card-stat">
+       <h2>Загальна закупівельна вартість</h2>
+       <p>{{ total_purchase_price }}</p>
+   </div>
 
-       <div class="card-stat">
-           <h2>Загальна продажна вартість</h2>
-           <p>{{ total_selling_price }}</p>
-       </div>
+   <div class="card-stat">
+       <h2>Загальна продажна вартість</h2>
+       <p>{{ total_selling_price }}</p>
+   </div>
 
-       <div class="card-stat">
-           <h2>Загальна кількість товарів</h2>
-           <p>{{ total_products_amount }}</p>
-       </div>
+   <div class="card-stat">
+       <h2>Загальна кількість товарів</h2>
+       <p>{{ total_products_amount }}</p>
+   </div>
 
-       <div class="card-stat">
-           <h2>Потенційний прибуток</h2>
-           <p>{{ potential_profit }}</p>
-       </div>
-    </div>
+   <div class="card-stat">
+       <h2>Потенційний прибуток</h2>
+       <p>{{ potential_profit }}</p>
+   </div>
+</div>
+</div>
 {% endblock %}
