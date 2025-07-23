@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Sum
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
@@ -202,8 +202,14 @@ class ProductsListView(TitleMixin, NonCashLimitContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = ProductCategory.objects.all()
 
+        # Сохраняем параметры запроса, кроме page
+        querydict = self.request.GET.copy()
+        querydict.pop('page', None)
+        context['query_params'] = querydict.urlencode()
+
+        # Добавляем остальной контекст
+        context['categories'] = ProductCategory.objects.all()
         context['search_bar'] = self.check_search_bar()
         context['add_product'] = True
         context['add_category'] = True

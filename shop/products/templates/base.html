@@ -4,25 +4,16 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
     {% block title %}{% endblock %}
 
-    <!-- Bootstrap core CSS -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    {% block css %} {% endblock %}
-
+    {% block css %}{% endblock %}
 </head>
 
 <body>
-
-<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
         <a class="navbar-brand" href="{% url 'products:products-list' %}">Головна</a>
@@ -32,118 +23,124 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                {% block nav_bar %}
-                {% endblock %}
+                {% block nav_bar %}{% endblock %}
+
                 {% if stat %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'stat-main' %}" role="button"
-                            aria-haspopup="true" aria-expanded="false">
-                            Статистика
-                        </a>
+                        <a class="nav-link" href="{% url 'stat-main' %}">Статистика</a>
                     </li>
                 {% endif %}
+
                 {% if categories and products %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Категорії
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% for category in categories %}
-                        <a class="dropdown-item" href="?category={{ category.id }}">{{ category.name }}</a>
-                        {% endfor %}
-                    </div>
-                </li>
-                {% endif %}
-                {% if is_transactions %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Транзакції
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'transactions:transactions-list' %}">Усі</a>
-                        {% if sales %}
-                        <a class="dropdown-item" href="{% url 'transactions:sales-list' %}">Продажі</a>
-                        {% endif %}
-                        {% if purchases %}
-                        <a class="dropdown-item" href="{% url 'transactions:purchases-list' %}">Закупівлі</a>
-                        {% endif %}
-                    </div>
-                </li>
-                {% endif %}
-                {% if add_product and add_category %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Додати
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'products:products-create' %}">Додати товар</a>
-                        <a class="dropdown-item" href="{% url 'products:category-create' %}">Додати категорію</a>
-                        <a class="dropdown-item" href="{% url 'products:products-create-and-purchase' %}">Додати і закупити</a>
-                    </div>
-                </li>
-                {% endif %}
-                {% if search_bar %}
-                <li>
-                    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'products:products-list' %}">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Пошук" aria-label="Пошук" name="search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
-                        <a class="btn btn-outline-danger ml-2" href="{% url 'products:products-list' %}">Скинути</a>
-                    </form>
-                </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Категорії
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for category in categories %}
+                                <a class="dropdown-item" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}category={{ category.id }}">
+                                    {{ category.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </li>
                 {% endif %}
 
+                {% if is_transactions %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Транзакції
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'transactions:transactions-list' %}">Усі</a>
+                            {% if sales %}
+                                <a class="dropdown-item" href="{% url 'transactions:sales-list' %}">Продажі</a>
+                            {% endif %}
+                            {% if purchases %}
+                                <a class="dropdown-item" href="{% url 'transactions:purchases-list' %}">Закупівлі</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% if add_product and add_category %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Додати
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'products:products-create' %}">Додати товар</a>
+                            <a class="dropdown-item" href="{% url 'products:category-create' %}">Додати категорію</a>
+                            <a class="dropdown-item" href="{% url 'products:products-create-and-purchase' %}">Додати і закупити</a>
+                        </div>
+                    </li>
+                {% endif %}
+
+                {% if search_bar %}
+                    <li>
+                        <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'products:products-list' %}">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Пошук" name="search"
+                                   value="{{ request.GET.search }}">
+                            {% if request.GET.category %}
+                                <input type="hidden" name="category" value="{{ request.GET.category }}">
+                            {% endif %}
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
+                            <a class="btn btn-outline-danger ml-2" href="{% url 'products:products-list' %}">Скинути</a>
+                        </form>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </nav>
 
-{% block content %} {% endblock %}
+{% block content %}{% endblock %}
 
 <footer class="bg-dark footer">
-  <div class="footer-container">
-    <div class="navbar-brand">
-      Безготівковий ліміт: {{ month_non_cash_limit }}
-    </div>
-
-    {% if paginator %}
-      <div class="footer-pagination">
-        <span class="pagination-info">
-          Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}
-        </span>
-
-        <div class="pagination-links">
-          {% if page_obj.has_previous %}
-            <a href="?page=1" class="page-btn">« Перша</a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="page-btn">‹ Назад</a>
-          {% endif %}
-
-          {% for num in page_obj.paginator.page_range %}
-            {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-              {% if num == page_obj.number %}
-                <span class="page-btn current">{{ num }}</span>
-              {% else %}
-                <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-
-          {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="page-btn">Вперед ›</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="page-btn">Остання »</a>
-          {% endif %}
+    <div class="footer-container">
+        <div class="navbar-brand">
+            Безготівковий ліміт: {{ month_non_cash_limit }}
         </div>
-      </div>
-    {% endif %}
-  </div>
+
+        {% if paginator %}
+            {% with query_params=query_params %}
+                <div class="footer-pagination">
+                    <span class="pagination-info">
+                        Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    <div class="pagination-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1&{{ query_params }}" class="page-btn">« Перша</a>
+                            <a href="?page={{ page_obj.previous_page_number }}&{{ query_params }}" class="page-btn">‹ Назад</a>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                {% if num == page_obj.number %}
+                                    <span class="page-btn current">{{ num }}</span>
+                                {% else %}
+                                    <a href="?page={{ num }}&{{ query_params }}" class="page-btn">{{ num }}</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}&{{ query_params }}" class="page-btn">Вперед ›</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}&{{ query_params }}" class="page-btn">Остання »</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endwith %}
+        {% endif %}
+    </div>
 </footer>
 
-<!-- Bootstrap core JavaScript -->
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
 </body>
 
 </html>
