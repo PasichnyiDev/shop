@@ -17,6 +17,7 @@ class NonCashLimitContextMixin:
 
     def get_non_cash_sales_sum(self):
         sales = Sale.objects.all()
+        sales = sales.filter(is_active=True)
         if sales:
             end_date = timezone.now()
             start_date = end_date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
