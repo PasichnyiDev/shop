@@ -100,6 +100,11 @@ class SalesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPeriod
         product_id = self.kwargs.get('product_id')
         if product_id:
             context['product_id'] = product_id
+
+        get_copy = self.request.GET.copy()
+        get_copy.pop('page', None)
+        query_params = get_copy.urlencode()
+        context['query_params'] = query_params
         return context
 
 
@@ -190,6 +195,11 @@ class PurchasesListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetByPe
         product_id = self.kwargs.get('product_id')
         if product_id:
             context['product_id'] = product_id
+
+        get_copy = self.request.GET.copy()
+        get_copy.pop('page', None)
+        query_params = get_copy.urlencode()
+        context['query_params'] = query_params
         return context
 
 
@@ -233,6 +243,11 @@ class TransactionsListView(TitleMixin, NonCashLimitContextMixin, FilterQuerySetB
         product_id = self.kwargs.get('product_id')
         if product_id:
             context['product_id'] = product_id
+
+        get_copy = self.request.GET.copy()
+        get_copy.pop('page', None)  # Удаляем 'page', чтобы избежать дубликатов
+        query_params = get_copy.urlencode()
+        context['query_params'] = query_params
         return context
 
 
